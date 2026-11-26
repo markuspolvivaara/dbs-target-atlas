@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { APPROACH_GEOM, crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT_YET_SHOWN, REGIONS, SB_MANIFEST } from '../../src/skullbase';
-import { SB_GROUPS } from '../../src/skullbase/groups';
+import { SB_GROUP, SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
 import { meshSoup, nodeExtentsX, nodeMeans, nodeMorphs, pointsInside } from './glb';
@@ -9,6 +9,8 @@ import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
 import { atOpeningNote, inBoneNote } from '../../src/ui/skullbase-atlas';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
+import { PERC_SECTIONS } from '../../src/skullbase/trigeminal-text';
+import { TRIGEMINAL } from '../../src/skullbase/trigeminal';
 
 describe('skull-base data (Z-Anatomy export)', () => {
   it('generated files agree with each other', () => {
@@ -363,16 +365,22 @@ describe('e2e group list stays in step with the groups module', () => {
     for (const g of SB_GROUPS) if (g.kind === 'bone') expect(spec, g.name).toContain(`'${g.name}'`);
     // (the overview, the regions, three systems, six bone views and the surgical views cut on this model's skull)
     // (and the six temporal-bone views)
-    // (and the six temporal-bone views, the cavernous sinus and the endonasal view; and the tumours: Knosp 0-3A, Koos I-IV, four sites)
-    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length + 6 + 2 + 12);
+    // (and the six temporal-bone views, the cavernous sinus and the endonasal view; and the tumours: Knosp 0-3A, Koos I-IV, four sites;
+    // and trigeminal neuralgia's percutaneous route, but not its decompression, which v1 does not have)
+    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length + 6 + 2 + 12 + 1);
     expect(SB_GROUPS.filter((g) => g.kind === 'tumour').map((g) => g.id)).toEqual(['knosp_0', 'knosp_1', 'knosp_2', 'knosp_3a', 'koos_i', 'koos_ii',
       'koos_iii', 'koos_iv', 'meningioma_olfactory', 'meningioma_tuberculum', 'meningioma_petroclival', 'meningioma_foramen_magnum']);
     expect(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => g.id).sort())
-      .toEqual(['endonasal', 'far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'subtemporal', 'telovelar', 'transsylvian']);
+      .toEqual(['endonasal', 'far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'subtemporal', 'telovelar', 'transsylvian', 'trigeminal_percutaneous']);
+    expect(SB_GROUP.has('trigeminal_mvd')).toBe(false);
     expect(SB_GROUPS.filter((g) => ['temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear'].includes(g.id)).length).toBe(6);
-    // the all-bones view draws every bone and every landmark
+    // the all-bones view draws every bone and every landmark of the model's own; the points the trigeminal neuralgia
+    // views add (here v1's mirrored right foramen ovale) are labelled in those views only
     const all = SB_GROUPS.find((g) => g.id === 'bone_all_bones')!;
-    expect(all.landmarks.length).toBe(LANDMARKS.length);
+    const tn = new Set((TRIGEMINAL?.landmarks ?? []).map((l) => l.id));
+    expect(tn.has('lm_foramen_ovale_r')).toBe(true);
+    expect(all.landmarks.length).toBe(LANDMARKS.length - tn.size);
+    expect(SB_GROUPS.filter((g) => g.landmarks.some((id) => tn.has(id))).map((g) => g.id)).toEqual(['trigeminal_percutaneous']);
     expect(all.structures.length).toBe(SB_MANIFEST.structures.filter((s) => s.type === 'bone').length);
   });
 });
@@ -1060,7 +1068,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   });
   it('a surgical view opens with its shapes full on, and a link that closes one keeps it closed', () => {
     const views = G3.SB_GROUPS.filter((g) => g.kind === 'approach' && g.morphs?.length);
-    expect(views.map((g) => g.id).sort()).toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'subtemporal', 'telovelar', 'transsylvian']);
+    expect(views.map((g) => g.id).sort()).toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'subtemporal', 'telovelar', 'transsylvian', 'trigeminal_mvd']);
     for (const g of views) {
       // every shape full on, but the far lateral view's second one (a view aid) and the clinoidectomy switch, which open at 0
       expect(g.morphDefault, g.id).toEqual(Object.fromEntries(g.morphs!.filter((m) => m !== 'farLateralBack' && m !== 'clinoid').map((m) => [m, 1])));
@@ -1071,15 +1079,23 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(T3.encodeSkull(closed)).toContain('op=0');
     expect(T3.decodeSkull(T3.encodeSkull(closed)).morphs).toEqual({ ridge: 1 });
   });
-  it('the cameras: v3\'s surgical views their own directions (the telovelar view its earlier one), the tumours of a view framed alike', () => {
+  it('the cameras: v3\'s surgical views their own directions (the telovelar view its earlier one), the tumours of a view framed alike', async () => {
     const cam = Object.fromEntries(G3.SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]));
     expect(cam).toMatchObject({ transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront',
-      retrosigmoid: 'retrosigmoidLateral', far_lateral: 'farLateralLow', telovelar: 'suboccipital', subtemporal: 'subtemporalLow' });
+      retrosigmoid: 'retrosigmoidLateral', far_lateral: 'farLateralLow', telovelar: 'suboccipital', subtemporal: 'subtemporalLow',
+      trigeminal_mvd: 'aim', trigeminal_percutaneous: 'aim' });
+    // the trigeminal neuralgia views' cameras are where the pipeline measured them (sbv3-trigeminal.json), passed on in the plan
+    const tn = (await import('../../src/data/generated/sbv3-trigeminal.json')).default as unknown as { mvd: { camera: { position: number[]; target: number[] } }; needle: { views: { overview: { position: number[]; target: number[] } } } };
+    expect(G3.SB_GROUP.get('trigeminal_mvd')!.aim).toEqual(tn.mvd.camera);
+    expect(G3.SB_GROUP.get('trigeminal_percutaneous')!.aim).toEqual(tn.needle.views.overview);
+    expect(S3.skullPlan('trigeminal_mvd', null).aim).toEqual(tn.mvd.camera);
+    expect(S3.skullPlan('trigeminal_percutaneous', null).drawn).toEqual([{ id: 'tn_needle', name: 'Needle path (drawn by rule)' }]);
+    expect(S3.skullPlan('retrosigmoid', null).aim).toBeUndefined();
     // v1 (this file's default model) opens its views as v3 does, except the retrosigmoid: on Z-Anatomy's skull v3's view
     // from below meets the mastoid, so it keeps its level one
     expect(Object.fromEntries(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]))).toMatchObject({
       transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront', retrosigmoid: 'retrosigmoidLevel',
-      far_lateral: 'farLateralLow', telovelar: 'suboccipital', subtemporal: 'subtemporalLow' });
+      far_lateral: 'farLateralLow', telovelar: 'suboccipital', subtemporal: 'subtemporalLow', trigeminal_percutaneous: 'aim' });
     // every tumour drawn in one view is framed on the same structures, so that going from one to another keeps the camera
     const tumours = G3.SB_GROUPS.filter((g) => g.tumour);
     const byView = new Map<string, typeof tumours>();
@@ -1094,7 +1110,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   it('sourced content: references exist and are used, context structures exist', async () => {
     const { TUMOURS } = await import('../../src/skullbase/tumours');
     const tumourClaims = TUMOURS.flatMap((t) => [...t.sections.flatMap((x) => x.claims), ...t.grades.flatMap((g) => [g.definition, ...(g.notes ?? [])])]);
-    const used = new Set([...[...APPROACHES, ENDONASAL_INFO, CAVERNOUS_INFO].flatMap((a) => a.sections.flatMap((x) => x.claims)), ...tumourClaims].flatMap((c) => c.refIds));
+    const used = new Set([...[...APPROACHES, ENDONASAL_INFO, CAVERNOUS_INFO, { sections: PERC_SECTIONS }].flatMap((a) => a.sections.flatMap((x) => x.claims)), ...tumourClaims].flatMap((c) => c.refIds));
     for (const r of used) expect(APPROACH_REF.has(r), r).toBe(true);
     expect(APPROACH_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
     for (const a of APPROACHES) for (const n of a.context) expect(v3.structures.some((s) => s.name === n), n).toBe(true);

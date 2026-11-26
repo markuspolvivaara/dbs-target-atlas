@@ -1,0 +1,203 @@
+{
+ "model": "v3",
+ "landmarks": [
+  {
+   "id": "lm_root_entry_zone_of_the_trigeminal_nerve_r",
+   "name": "Root entry zone of the trigeminal nerve",
+   "bone": "Pons",
+   "part": null,
+   "ras": [
+    16.73,
+    -20.37,
+    0.41
+   ],
+   "side": "R",
+   "boneFrom": "located on this CT",
+   "distanceToBoneMm": 0.11,
+   "placed": "Where the trigeminal nerve as drawn on this CT meets the fitted pons: the centre of the nerve's end there (each routed nerve is cut where it enters the drawn brainstem), 0.11 mm from the pons's surface."
+  },
+  {
+   "id": "lm_root_entry_zone_of_the_trigeminal_nerve_l",
+   "name": "Root entry zone of the trigeminal nerve",
+   "bone": "Pons",
+   "part": null,
+   "ras": [
+    -12.9,
+    -22.77,
+    7.12
+   ],
+   "side": "L",
+   "boneFrom": "located on this CT",
+   "distanceToBoneMm": 0.03,
+   "placed": "Where the trigeminal nerve as drawn on this CT meets the fitted pons: the centre of the nerve's end there (each routed nerve is cut where it enters the drawn brainstem), 0.03 mm from the pons's surface."
+  }
+ ],
+ "mvd": {
+  "side": "R",
+  "rootEntry": [
+   16.73,
+   -20.37,
+   0.41
+  ],
+  "porus": [
+   17.59,
+   -11.65,
+   -1.43
+  ],
+  "cisternalMm": 9.0,
+  "camera": {
+   "position": [
+    38.4,
+    -43.57,
+    -7.64
+   ],
+   "target": [
+    16.73,
+    -20.37,
+    0.41
+   ]
+  },
+  "cameraToRootMm": 32.75,
+  "rootVisiblePct": 76,
+  "craniotomyBelowRootMm": 30.57,
+  "arteries": [
+   {
+    "name": "Superior cerebellar artery",
+    "toRootMm": 6.53,
+    "where": "above and medial to the root, 2 mm out from its entry"
+   },
+   {
+    "name": "Superior cerebellar artery (fitted course)",
+    "toRootMm": 2.67,
+    "where": "above the root at its entry"
+   },
+   {
+    "name": "Anterior inferior cerebellar artery",
+    "toRootMm": 15.52,
+    "where": "below and medial to the root, 7 mm out from its entry"
+   }
+  ],
+  "nerves": [
+   {
+    "name": "Facial nerve (VII)",
+    "fromRootMm": 17.36,
+    "belowMm": 13.35
+   },
+   {
+    "name": "Vestibulocochlear nerve (VIII)",
+    "fromRootMm": 20.26,
+    "belowMm": 15.24
+   }
+  ]
+ },
+ "needle": {
+  "side": "R",
+  "outer": [
+   45.92,
+   10.5,
+   -44.62
+  ],
+  "crossing": [
+   23.73,
+   1.38,
+   -12.61
+  ],
+  "tip": [
+   17.24,
+   -1.28,
+   -3.26
+  ],
+  "tipAt": "Meckel's cave",
+  "ovaleCentre": [
+   24.51,
+   0.41,
+   -12.89
+  ],
+  "crossingFromCentreMm": 1.28,
+  "tipBeyondCrossingMm": 11.69,
+  "outerBelowCrossingMm": 40,
+  "angles": {
+   "fromVerticalDeg": 36.9,
+   "medialDeg": 34.7,
+   "backwardDeg": 15.9
+  },
+  "boneCrossedMm": 0.0,
+  "clearanceMm": 0.25,
+  "nearest": [
+   {
+    "name": "Cavernous sinus",
+    "mm": 2.57,
+    "atMm": -11.69
+   },
+   {
+    "name": "Internal carotid artery (petrous and lacerum parts)",
+    "mm": 3.46,
+    "atMm": -11.69
+   },
+   {
+    "name": "Walls of the cavernous sinus",
+    "mm": 1.03,
+    "atMm": -11.69
+   },
+   {
+    "name": "Maxillary nerve (V2)",
+    "mm": 5.55,
+    "atMm": -10.69
+   },
+   {
+    "name": "Mandibular nerve (V3)",
+    "mm": 1.52,
+    "atMm": -1.44
+   },
+   {
+    "name": "Accessory branch of middle meningeal artery",
+    "mm": 1.67,
+    "atMm": -0.19
+   }
+  ],
+  "lateralAim": {
+   "lineAheadOfMeatusMm": 22.1,
+   "eminenceAheadOfMeatusMm": 16.5
+  },
+  "views": {
+   "along": {
+    "position": [
+     73.66,
+     21.89,
+     -84.63
+    ],
+    "target": [
+     23.73,
+     1.38,
+     -12.61
+    ]
+   },
+   "overview": {
+    "position": [
+     168.04,
+     -74.18,
+     -51.72
+    ],
+    "target": [
+     31.58,
+     4.61,
+     -23.94
+    ]
+   }
+  },
+  "openingSeenAlongMm2": 0.75
+ },
+ "ovale": {
+  "side": "R",
+  "lengthMm": 4.28,
+  "widthMm": 2.4,
+  "areaMm2": 7.36,
+  "how": "the narrowest section square to the canal (the axis that makes it narrowest), in the bone field the skull is drawn from",
+  "ct": {
+   "lengthMm": 6.92,
+   "widthMm": 4.35,
+   "areaMm2": 23.67,
+   "how": "half-maximum HU profiles across the CT through the opening, along the section’s long and short axes; area as an ellipse"
+  }
+ }
+}

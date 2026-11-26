@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 
 /**
  * Regression tests for the fixes that followed the audit of November 2026 (audit/README.md on the audit branch). Each
@@ -2194,6 +2195,128 @@ test('a teaching tour: started from its approach, played through with Next and P
   await expect(page.locator('.tour-card')).toHaveCount(0);
   await expect.poll(() => new URL(page.url()).hash).not.toContain('tour=');
   expect(new URL(page.url()).hash).toContain('sel=tb_optic_nerve_ii');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// module plan A3 (the owner's decisions of 26 November 2026): trigeminal neuralgia's two views, the microvascular
+// decompression on v3 only and the percutaneous route on v3 and v1, from pipeline/skullbase_trigeminal.py's measurements
+type TnPose = { position: number[]; target: number[] };
+type TnFile = { mvd: null | { camera: TnPose; cisternalMm: number }; needle: { outer: number[]; tip: number[]; crossing: number[]; views: { along: TnPose; overview: TnPose } } };
+const tnFile = (prefix: string) => JSON.parse(readFileSync(new URL(`../../src/data/generated/${prefix}-trigeminal.json`, import.meta.url), 'utf8')) as TnFile;
+const tnCam = (page: Page) => page.evaluate(() => (window as unknown as { __atlas: { state(): { cam: { pos?: number[]; tgt?: number[] } } } }).__atlas.state().cam);
+const tnNear = (a: number[] | undefined, b: number[], mm: number) => !!a && Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]) < mm;
+/** the needle's parts the viewer draws now (ui/skullbase-needle.ts) */
+const needleParts = (page: Page) => page.evaluate(() => {
+  type O = { userData?: { drawn?: string }; visible: boolean; parent: O | null };
+  const v = (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (o: O) => void) => void } } } }).__atlas.viewer;
+  let n = 0;
+  v.scene.traverse((o) => { if (o.userData?.drawn === 'tn_needle' && o.visible) n++; });
+  return n;
+});
+async function textVersion(page: Page): Promise<string> {
+  await page.locator('.skip-text').evaluate((a) => (a as HTMLElement).click());
+  const dlg = page.locator('dialog.textview');
+  await expect(dlg).toHaveJSProperty('open', true);
+  const t = await dlg.innerText();
+  await page.keyboard.press('Escape');
+  await expect(dlg).toHaveJSProperty('open', false);
+  return t;
+}
+
+test('trigeminal neuralgia (v3): the decompression opens inside the posterior fossa, the cerebellum drawn back, with its card and read-out', async ({ page }) => {
+  const g = guard(page);
+  const T = tnFile('sbv3');
+  await open(page, './skullbase/#/atlas?g=trigeminal_mvd');
+  const morph = (name: string) => page.evaluate((n) => {
+    type M = { morphTargetInfluences?: number[]; morphTargetDictionary?: Record<string, number>; visible: boolean };
+    const v = (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (o: M) => void) => void } } } }).__atlas.viewer;
+    let m = -1;
+    v.scene.traverse((o) => { const i = o.morphTargetDictionary?.[n]; if (o.visible && i !== undefined && o.morphTargetInfluences) m = Math.max(m, o.morphTargetInfluences[i]); });
+    return m;
+  }, name);
+  expect(await morph('retrosigmoid')).toBe(1);
+  await expect(page.locator('#sb-m-retrosigmoid')).toHaveCount(1);
+  // the camera exactly where the pipeline measured it, aimed at the root entry zone
+  await expect.poll(async () => tnNear((await tnCam(page)).pos, T.mvd!.camera.position, 0.2)).toBe(true);
+  expect(tnNear((await tnCam(page)).tgt, T.mvd!.camera.target, 0.2)).toBe(true);
+  await expect(page.locator('.grp-chips[aria-label="Surgical views"] .chip[aria-pressed="true"]')).toHaveText('Trigeminal neuralgia: microvascular decompression');
+  // the panel lists the nerve, the arteries beside it and the nerves below it first
+  await expect(page.locator('.sb-focus .sb-item')).toHaveText(['Trigeminal nerve (V)', 'Superior cerebellar artery (fitted course)', 'Superior cerebellar artery', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)']);
+  const card = page.locator('.pane:not([hidden]) article.card').last();
+  for (const t of ['Trigeminal neuralgia and the root entry zone', 'The offending vessel', 'The superior petrosal vein', 'The decompression', 'Outcomes', 'Care points',
+    'How the craniotomy is drawn (the retrosigmoid approach’s)', 'Not shown']) await expect(card.locator('dt', { hasText: t }).first()).toBeVisible();
+  const readout = card.locator('[data-measured="tnRoot"]');
+  await expect(readout).toContainText('Measured on this model');
+  await expect(readout).toContainText(`${T.mvd!.cisternalMm.toFixed(1)} mm along the nerve`);
+  await expect(readout).toContainText('The camera sits inside the posterior fossa');
+  await expect(readout).toContainText('Superior cerebellar artery (fitted course): 2.7 mm from the root');
+  // the root entry zone, labelled on the right
+  await expect(page.locator('.sb-item[data-id="lm_root_entry_zone_of_the_trigeminal_nerve_r"]')).toHaveCount(1);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+for (const [dir, prefix, model] of [['skullbase', 'sbv3', 'v3'], ['skullbase-v1', 'sb', 'v1']] as const) {
+  test(`trigeminal neuralgia (${model}): the percutaneous route draws its needle, looks along it, hides it and lists it`, async ({ page }) => {
+    const g = guard(page);
+    const T = tnFile(prefix);
+    const n = T.needle;
+    await open(page, `./${dir}/#/atlas?g=trigeminal_percutaneous`);
+    expect(await needleParts(page)).toBe(3);
+    await expect.poll(async () => tnNear((await tnCam(page)).pos, n.views.overview.position, 0.2)).toBe(true);
+    const card = page.locator('.pane:not([hidden]) article.card').last();
+    await expect(card.locator('h2')).toHaveText('Trigeminal neuralgia: percutaneous route');
+    await expect(card.locator('[data-measured="tnNeedle"]')).toContainText('Bone crossed from the outer end to the tip: 0.0 mm');
+    await expect(card.locator('[data-measured="tnNeedle"]')).toContainText('in front of the bony ear canal at the height of the articular eminence');
+    await expect(card.locator('[data-measured="tnOvale"]')).toContainText('The foramen as drawn');
+    if (model === 'v3') await expect(card.locator('[data-measured="tnOvale"]')).toContainText('As the CT itself shows it');
+    else await expect(card).toContainText('There is no microvascular decompression view on this model');
+    // looking along the needle: the camera on its line, below the foramen, aimed at the crossing, and the link keeps it
+    await card.locator('button[data-tn="along"]').click();
+    await settle(page);
+    await expect.poll(async () => tnNear((await tnCam(page)).pos, n.views.along.position, 0.2)).toBe(true);
+    const cam = await tnCam(page);
+    expect(tnNear(cam.tgt, n.crossing, 0.2)).toBe(true);
+    const d = n.tip.map((x, k) => x - n.outer[k]);
+    const len = Math.hypot(...d);
+    const w = cam.pos!.map((x, k) => x - n.outer[k]);
+    const along = (w[0] * d[0] + w[1] * d[1] + w[2] * d[2]) / len;
+    expect(Math.hypot(...w.map((x, k) => x - (d[k] / len) * along))).toBeLessThan(0.5);
+    await expect.poll(() => new URL(page.url()).hash).toMatch(/[?&]c=-?\d/);
+    await card.locator('button[data-tn="overview"]').click();
+    await settle(page);
+    await expect.poll(async () => tnNear((await tnCam(page)).pos, n.views.overview.position, 0.2)).toBe(true);
+    // the text version lists it, drawn by rule
+    const text = await textVersion(page);
+    expect(text).toContain('Drawn by rule');
+    expect(text).toContain('Needle path (drawn by rule)');
+    // the legend's eye hides it (hid=tn_needle), and a link with it opens hidden
+    const row = page.locator('.legend3d li', { hasText: 'Needle path (drawn by rule)' });
+    await expect(row).toHaveCount(1);
+    await row.locator('.eye').evaluate((b) => (b as HTMLElement).click());
+    await expect.poll(() => new URL(page.url()).hash).toContain('hid=tn_needle');
+    expect(await needleParts(page)).toBe(0);
+    await open(page, `./${dir}/#/atlas?g=trigeminal_percutaneous&hid=tn_needle`);
+    expect(await needleParts(page)).toBe(0);
+    expect(await textVersion(page)).not.toContain('Needle path');
+    expect(g.external).toEqual([]);
+    expect(g.errors).toEqual([]);
+  });
+}
+
+test('trigeminal neuralgia (v1): the surgical views have no decompression chip, and its Sources page says why', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase-v1/#/atlas?g=retrosigmoid');
+  const chips = page.locator('.grp-chips[aria-label="Surgical views"] .chip');
+  await expect(chips.filter({ hasText: 'Trigeminal neuralgia: percutaneous route' })).toHaveCount(1);
+  await expect(page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="trigeminal_mvd"]')).toHaveCount(0);
+  await expect(chips.filter({ hasText: 'microvascular decompression' })).toHaveCount(0);
+  // a decompression link opens the default view instead
+  await open(page, './skullbase-v1/#/atlas?g=trigeminal_mvd');
+  expect(new URL(page.url()).hash).not.toContain('g=trigeminal_mvd');
+  await open(page, './skullbase-v1/#/sources');
+  await expect(page.locator('#trigeminal')).toContainText('There is no microvascular decompression view on this model');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

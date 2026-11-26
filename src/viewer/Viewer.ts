@@ -24,7 +24,7 @@ interface LineItem { kind: 'lines'; meta: ManifestStructure; nodes: Partial<Reco
 type Item = MeshItem | LineItem;
 
 export interface PickInfo {
-  id: string | null; name: string; ras: THREE.Vector3; side: Side | null; kind: 'structure' | 'slice' | 'lead' | 'marker';
+  id: string | null; name: string; ras: THREE.Vector3; side: Side | null; kind: 'structure' | 'slice' | 'lead' | 'marker' | 'tool';
   /** seen through the endoscope: how far behind the ventricle's wall it lies (mm) */
   behindMm?: number;
   /** ... through the thin floor of the third ventricle */
@@ -431,8 +431,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   }
 
   // ---------------------------------------------------------------- overlay
-  /** Replace the section's own objects (in the scene's RAS millimetres). A mesh whose userData.token names a palette
-   * token takes that colour, now and on theme changes. */
+  /** Replace the section's own objects (in the scene's RAS millimetres). A mesh or line whose userData.token names a
+   * palette token takes that colour, now and on theme changes. A mesh with userData.pick (a name) can be pointed at: its
+   * hover tip says that name (PickInfo kind 'tool'); one with userData.drawn (an id) counts as drawn (shownIds). */
   setOverlay(objects: THREE.Object3D[]): void {
     // (lines too: the ventricles' catheter and endoscope draw THREE.Line overlays, the audit's P1-28)
     for (const c of [...this.overlayGroup.children]) { this.overlayGroup.remove(c); disposeTree(c); }
@@ -446,7 +447,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.overlayGroup.traverse((o) => {
       const m = o as THREE.Mesh;
       const token = m.userData?.token as string | undefined;
-      if (m.isMesh && token && this.palette[token]) for (const mt of [m.material].flat()) (mt as THREE.MeshStandardMaterial).color?.set(this.palette[token]);
+      // (lines too: the ventricles' dashed catheter line kept three.js's white)
+      if ((m.isMesh || (o as THREE.Line).isLine) && token && this.palette[token]) for (const mt of [m.material].flat()) (mt as THREE.MeshStandardMaterial).color?.set(this.palette[token]);
     });
     this.invalidate();
   }
@@ -1190,6 +1192,13 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // farLateralLow: steeper from below than farLateral, past the lifted tonsil to the vertebral artery and the lower
       // cranial nerves on the side of the medulla
       case 'farLateralLow': dir = new THREE.Vector3(0.35 * sideSign, -0.52, -0.78); break;
+      // aim: exactly where the plan puts it (a place measured on the model); from below without one
+      case 'aim': {
+        const a = this.plan.aim;
+        if (a) { this.setCamera(new THREE.Vector3(...a.position), new THREE.Vector3(...a.target), animate); return; }
+        dir = new THREE.Vector3(0, 0.05, -1);
+        break;
+      }
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;
@@ -1286,6 +1295,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     // ghosted nuclei (and structures faded back round a selection) remain pickable but rank after highlighted ones
     for (const it of this.items.values()) if (it.kind === 'mesh' && (it.look === 'ghost' || it.faded) && it.meta.id !== 'cortex') for (const n of Object.values(it.nodes)) if (n?.visible) out.push(n);
     out.push(...this.markerGroup.children.filter((m) => m.visible && this.markerGroup.visible));
+    this.overlayGroup.traverse((o) => { if ((o as THREE.Mesh).isMesh && o.userData.pick && o.visible) out.push(o); });
     out.push(...this.slices.pickables());
     for (const l of Object.values(this.leads)) if (l.group.visible) out.push(l.group);
     return out;
@@ -1344,6 +1354,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       const o = h.object;
       if (o.userData.lead) return 0;
       if (o.userData.marker) return 1;
+      if (o.userData.pick) return 1.5;
       if (o.userData.slice) return 5;
       const it = this.items.get(o.userData.id);
       if (!it) return 4;
@@ -1366,6 +1377,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       return { id: o.userData.marker, name: t?.label ?? '', ras, side: o.userData.side, kind: 'marker' };
     }
     if (o.userData.lead) return { id: null, name: `Lead (${o.userData.lead === 'L' ? 'left' : 'right'})`, ras, side: o.userData.lead, kind: 'lead' };
+    if (o.userData.pick) return { id: null, name: String(o.userData.pick), ras, side: null, kind: 'tool' };
     if (o.userData.slice) return { id: null, name: `${o.userData.slice} slice`, ras, side: ras.x < 0 ? 'L' : 'R', kind: 'slice' };
     const it = this.items.get(o.userData.id);
     return { id: o.userData.id, name: it?.meta.name ?? '', ras, side: o.userData.side, kind: 'structure' };
@@ -1564,11 +1576,14 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   shownIds(): string[] {
     const items = [...this.items.values()].filter((it) => Object.values(it.nodes).some((n) => n?.visible)).map((it) => it.meta.id);
     const marks = this.markerGroup.visible ? this.markerGroup.children.filter((m) => m.visible).map((m) => m.userData.marker as string) : [];
-    return [...new Set([...items, ...marks])];
+    // what the section draws by rule (the skull base's needle), by the id its plan lists it under (ScenePlan.drawn)
+    const drawn: string[] = [];
+    this.overlayGroup.traverse((o) => { if (o.userData.drawn && o.visible) drawn.push(o.userData.drawn as string); });
+    return [...new Set([...items, ...marks, ...drawn])];
   }
 
   /** A structure's name, for the structure bar (null when the catalogue does not have it). */
-  nameOf(id: string): string | null { return this.cat.byId.get(id)?.name ?? this.cat.markers.get(id)?.label ?? null; }
+  nameOf(id: string): string | null { return this.cat.byId.get(id)?.name ?? this.cat.markers.get(id)?.label ?? this.plan?.drawn?.find((d) => d.id === id)?.name ?? null; }
 
   /** Call `f` after every state the page applies (the structure bar follows the selection with it). */
   onApply(f: (s: ViewState) => void): void { this.applyListeners.push(f); }

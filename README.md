@@ -513,6 +513,13 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   nuclei; the obex at the floor's caudal tip, the median sulcus at the colliculi's level) and carried into this CT with
   the fitted ventricle, vertex for vertex: the model's, not this patient's. Their cards cite Erginoglu 2026 (the floor's
   morphometry in 40 brainstems) and Zhuang 2021.
+- **Trigeminal neuralgia views** (`pipeline/skullbase_trigeminal.py`, run by hand after the models are built; it reads
+  the shipped meshes through `pipeline/glb_dump.mjs` and writes only `src/data/generated/sbv3-trigeminal.json` and
+  `sb-trigeminal.json`): for the microvascular decompression (v3 only) the root entry zone where the drawn nerve meets
+  the pons, the camera inside the posterior fossa and the neighbours' distances; for the percutaneous route on both
+  models the needle along Härtel's trigeminal axis (Meckel's cave through the foramen ovale, 40 mm on below it, clear
+  of the bone), its cameras and the foramen's measured size. Rerun it whenever the skull, the trigeminal nerve or the
+  hindbrain is rebuilt; `tests/unit/trigeminal.test.ts` fails if the needle then crosses bone or misses its points.
 - Cards cite open-access sources checked against their full texts (`src/skullbase/temporal.ts`): Gupta 2013,
   Kalaiarasi 2018, Nguyen 2026, García-Barrios 2021, Sieber 2019.
 - Pipeline: `pipeline/fetch_openear.py volumes`, `pipeline/skullbase_ct.py` (writes the frame and the bone grid),

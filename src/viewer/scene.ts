@@ -45,6 +45,11 @@ export interface ScenePlan {
   /** structures drawn on one side only: a skull base tumour view's untouched half of a part whose moved copy holds the
    * other half (the site audit's MC-18) */
   onlySide?: Map<string, 'L' | 'R'>;
+  /** camera 'aim': the camera's place and target, exactly (RAS mm) */
+  aim?: { position: V3; target: V3 };
+  /** what a section draws by rule as its own objects (Viewer.setOverlay), by id and name: listed in the text version
+   * (the skull base's percutaneous needle) */
+  drawn?: { id: string; name: string }[];
 }
 
 /** Where to put a label on a cortical surface, on the pial and on the inflated surface (RAS mm, unit normals). */

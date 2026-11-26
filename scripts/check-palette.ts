@@ -188,6 +188,12 @@ for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNer
   ['skull base v3: cavernous sinus', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbTriMedial', 'sbTriLateral', 'sbTriPosterior']],
   ['skull base v3: other craniotomies', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbBrain', 'sbBrainstem', 'sbTonsil', 'sbGuide']],
   ['skull base v3: endonasal', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbSoft']],
+  // trigeminal neuralgia's percutaneous route: the skull base with the trigeminal nerve, the carotid, the meningeal
+  // arteries, the cavernous sinus (v3: a vein in its walls; v1: Z-Anatomy's soft-tissue volume, its walls not drawn) and
+  // the needle drawn by rule (ui/skullbase-needle.ts NEEDLE_TOKEN: not the instruments' 'electrode', which in the dark
+  // theme is too close to the walls' sbDura)
+  ['skull base v3: trigeminal, percutaneous', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbDura', 'sbMedialWall']],
+  ['skull base v1: trigeminal, percutaneous', ['sbBone', 'sbArtery', 'sbNerve', 'sbSoft', 'sbMedialWall']],
   ['vascular: lesions', ['sbBone', 'sbArtery', 'sbVein', 'sbBrain', 'sbInsula', 'sbMedialWall', 'vaAneurysm', 'vaNidus', 'vaDevice']],
   ['cortex: functions', ['ctx', 'ctxA1', 'ctxACC', 'ctxBroca', 'ctxM1', 'ctxPM', 'ctxPMv', 'ctxPreSMA', 'ctxS1', 'ctxSMA', 'ctxV1', 'ctxVMPFC', 'ctxWernicke']]] as const) {
   for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {

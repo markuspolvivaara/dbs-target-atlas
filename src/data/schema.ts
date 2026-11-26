@@ -35,10 +35,11 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
  * (skull-base section, surgical views). Skull base v3's surgical views have their own: 'pterional', 'orbitozygomaticFront',
  * 'vertexFront', 'retrosigmoidLateral' and 'farLateralLow' (Viewer.goPreset); 'subtemporalLow' looks from the side, a
  * little behind and below, along the middle fossa floor under the lifted temporal lobe to the tentorial edge (the
- * subtemporal view, both models).
+ * subtemporal view, both models). 'aim' puts the camera exactly where the view's plan says (ScenePlan.aim: a place measured
+ * on the model, the trigeminal neuralgia views'), framed from below ('inferior') when the plan has none.
  */
 export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal', 'retrosigmoidLevel', 'subtemporalLow',
-  'pterional', 'orbitozygomaticFront', 'vertexFront', 'retrosigmoidLateral', 'farLateralLow']);
+  'pterional', 'orbitozygomaticFront', 'vertexFront', 'retrosigmoidLateral', 'farLateralLow', 'aim']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */
