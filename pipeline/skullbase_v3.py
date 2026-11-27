@@ -1504,6 +1504,10 @@ def validate() -> int:
     import skullbase_v3_tumours as TM
     for ok, msg in TM.check(m["structures"]):
         check(ok, msg)
+    # the herniation views' copies and guide (skullbase_v3_herniation.py)
+    import skullbase_v3_herniation as HN
+    for ok, msg in HN.check(m["structures"]):
+        check(ok, msg)
     aps = json.loads((GEN / f"{PREFIX}-approaches.json").read_text())
     for it in m["structures"]:
         check((REPO / "public" / it["file"]).exists(), f"missing {it['file']}")
@@ -1581,7 +1585,8 @@ def validate() -> int:
     check(any(it["name"] == "Falx cerebri" for it in m["structures"]), "the falx is missing")
     check(all(it.get("morph") for it in m["structures"] if it["name"] in ("Middle cerebral artery (M2 segment)", "Middle cerebral artery (M3 segment)")),
           "M2 and M3 carry the opening")
-    pica = [it for it in m["structures"] if it["name"].startswith("Posterior inferior cerebellar artery") and not it.get("tumourView")]
+    pica = [it for it in m["structures"] if it["name"].startswith("Posterior inferior cerebellar artery") and not it.get("tumourView")
+            and not it.get("herniationView")]
     check(len(pica) == 2 and all(it.get("morph") for it in pica), "the PICA and its carried-on course move with the cerebellum")
     # a centroid is where an item's label stands: no further from the mesh it ships than a quarter of the mesh's extent
     # (3 mm for a small one). A curved vessel's lies off it by a few millimetres; one carried over from another file's

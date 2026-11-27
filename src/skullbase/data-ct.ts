@@ -4,5 +4,5 @@ import landmarks from '../data/generated/sbct-landmarks.json';
 import manifest from '../data/generated/sbct-manifest.json';
 import regions from '../data/generated/sbct-regions.json';
 
-// (v2 has no trigeminal neuralgia views)
-export default { manifest: manifest as unknown, landmarks: landmarks as unknown, definitions: definitions as unknown, regions: regions as unknown, trigeminal: null as unknown };
+// (v2 has no trigeminal neuralgia views and no herniation views)
+export default { manifest: manifest as unknown, landmarks: landmarks as unknown, definitions: definitions as unknown, regions: regions as unknown, trigeminal: null as unknown, herniation: null as unknown };

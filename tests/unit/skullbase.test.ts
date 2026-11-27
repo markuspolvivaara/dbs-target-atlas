@@ -10,6 +10,7 @@ import { atOpeningNote, inBoneNote } from '../../src/ui/skullbase-atlas';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
 import { PERC_SECTIONS } from '../../src/skullbase/trigeminal-text';
+import { TONSILLAR_SECTIONS } from '../../src/skullbase/herniation-text';
 import { TRIGEMINAL } from '../../src/skullbase/trigeminal';
 
 describe('skull-base data (Z-Anatomy export)', () => {
@@ -373,6 +374,8 @@ describe('e2e group list stays in step with the groups module', () => {
     expect(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => g.id).sort())
       .toEqual(['endonasal', 'far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'subtemporal', 'telovelar', 'transsylvian', 'trigeminal_percutaneous']);
     expect(SB_GROUP.has('trigeminal_mvd')).toBe(false);
+    // (the herniation views are v3's only: the owner's decision of 26 November 2026)
+    expect(SB_GROUPS.filter((g) => g.kind === 'herniation')).toEqual([]);
     expect(SB_GROUPS.filter((g) => ['temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear'].includes(g.id)).length).toBe(6);
     // the all-bones view draws every bone and every landmark of the model's own; the points the trigeminal neuralgia
     // views add (here v1's mirrored right foramen ovale) are labelled in those views only
@@ -475,7 +478,8 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
     }
   });
   it('every carried-over structure has both ears, on their sides; vessels are the CT model\'s own files, bone this model\'s', () => {
-    for (const s of v3.structures.filter((x) => !x.id.startsWith('tm_') && !x.pushedFrom)) {     // (the tumours have their own test)
+    // (the tumours, and the herniation views' copies and guide, have their own tests)
+    for (const s of v3.structures.filter((x) => !x.id.startsWith('tm_') && !x.pushedFrom && !x.herniationView)) {
       if (s.id.startsWith('tb_') || s.id.startsWith('br_') || s.id.startsWith('pf_')) {
         if (s.id === 'tb_anterior_spinal_artery') {
           // its two halves run together down the front of the medulla, on the fitted medulla's midline (which is not
@@ -1088,6 +1092,11 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const tn = (await import('../../src/data/generated/sbv3-trigeminal.json')).default as unknown as { mvd: { camera: { position: number[]; target: number[] } }; needle: { views: { overview: { position: number[]; target: number[] } } } };
     expect(G3.SB_GROUP.get('trigeminal_mvd')!.aim).toEqual(tn.mvd.camera);
     expect(G3.SB_GROUP.get('trigeminal_percutaneous')!.aim).toEqual(tn.needle.views.overview);
+    // the tonsillar herniation view (its own row, after the tumours): its sagittal camera from sbv3-herniation.json
+    const hn = (await import('../../src/data/generated/sbv3-herniation.json')).default as unknown as { tonsillar: { cameras: { sagittal: { position: number[]; target: number[] } } } };
+    expect(G3.SB_GROUPS.filter((g) => g.kind === 'herniation').map((g) => [g.id, g.camera])).toEqual([['herniation_tonsillar', 'aim']]);
+    const { hnPose } = await import('../../src/skullbase/herniation');
+    expect(S3.skullPlan('herniation_tonsillar', null).aim).toEqual(hnPose(hn.tonsillar.cameras.sagittal));
     expect(S3.skullPlan('trigeminal_mvd', null).aim).toEqual(tn.mvd.camera);
     expect(S3.skullPlan('trigeminal_percutaneous', null).drawn).toEqual([{ id: 'tn_needle', name: 'Needle path (drawn by rule)' }]);
     expect(S3.skullPlan('retrosigmoid', null).aim).toBeUndefined();
@@ -1110,7 +1119,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   it('sourced content: references exist and are used, context structures exist', async () => {
     const { TUMOURS } = await import('../../src/skullbase/tumours');
     const tumourClaims = TUMOURS.flatMap((t) => [...t.sections.flatMap((x) => x.claims), ...t.grades.flatMap((g) => [g.definition, ...(g.notes ?? [])])]);
-    const used = new Set([...[...APPROACHES, ENDONASAL_INFO, CAVERNOUS_INFO, { sections: PERC_SECTIONS }].flatMap((a) => a.sections.flatMap((x) => x.claims)), ...tumourClaims].flatMap((c) => c.refIds));
+    const used = new Set([...[...APPROACHES, ENDONASAL_INFO, CAVERNOUS_INFO, { sections: PERC_SECTIONS }, { sections: TONSILLAR_SECTIONS }].flatMap((a) => a.sections.flatMap((x) => x.claims)), ...tumourClaims].flatMap((c) => c.refIds));
     for (const r of used) expect(APPROACH_REF.has(r), r).toBe(true);
     expect(APPROACH_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
     for (const a of APPROACHES) for (const n of a.context) expect(v3.structures.some((s) => s.name === n), n).toBe(true);
@@ -1267,6 +1276,9 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(SB_MANIFEST.structures.some((x) => /Labb/.test(x.name))).toBe(false);
     // its address: the slider's own parameter, kept in a link
     expect(T3.MORPH_PARAMS.subtemporal).toBe('st');
+    // (each shape its own parameter: the herniation view's too)
+    expect(T3.MORPH_PARAMS.tonsillar).toBe('to');
+    expect(new Set(Object.values(T3.MORPH_PARAMS)).size).toBe(Object.keys(T3.MORPH_PARAMS).length);
     const st = T3.defaultSkullState();
     st.grp = 'subtemporal';
     st.morphs = { subtemporal: 0.4 };

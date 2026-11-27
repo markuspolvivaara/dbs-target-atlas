@@ -9654,6 +9654,294 @@
      15.38
     ]
    }
+  },
+  {
+   "id": "pf_tonsil__hn_tonsillar",
+   "name": "Tonsil of cerebellum",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_tonsil__hn_tonsillar.glb",
+   "bytes": 59308,
+   "colour": {
+    "token": "sbTonsil",
+    "light": "#7D6DFF",
+    "dark": "#6262C3"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: tonsil of cerebellum), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.496 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 751 vertices still in an artery's way and the 818 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; the far lateral slider lifts the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline, and its second slider draws them 8 mm straight back; shapes, not a simulation of the tissue. In the tonsillar herniation view its slider moves it down through the foramen magnum with the tonsils (by up to 10.9 mm at full; skullbase_v3_herniation.py): an illustration drawn by rule, not a simulation.",
+   "centroid": {
+    "L": [
+     -10.54,
+     -41.71,
+     -25.79
+    ],
+    "R": [
+     9.26,
+     -41.43,
+     -27.35
+    ]
+   },
+   "replaces": "pf_tonsil",
+   "pushedFrom": "assets/skullbase-v3/pf_tonsil.glb",
+   "herniationView": "herniation_tonsillar",
+   "copySides": [
+    "L",
+    "R"
+   ]
+  },
+  {
+   "id": "pf_cerebellar_hemisphere__hn_tonsillar",
+   "name": "Cerebellar hemisphere",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_cerebellar_hemisphere__hn_tonsillar.glb",
+   "bytes": 559936,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.496 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 751 vertices still in an artery's way and the 818 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; the far lateral slider lifts the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline, and its second slider draws them 8 mm straight back; shapes, not a simulation of the tissue. In the tonsillar herniation view its slider moves it down through the foramen magnum with the tonsils (by up to 5.4 mm at full; skullbase_v3_herniation.py): an illustration drawn by rule, not a simulation.",
+   "centroid": {
+    "L": [
+     -18.55,
+     -51.89,
+     -12.76
+    ],
+    "R": [
+     18.27,
+     -51.71,
+     -16.56
+    ]
+   },
+   "replaces": "pf_cerebellar_hemisphere",
+   "pushedFrom": "assets/skullbase-v3/pf_cerebellar_hemisphere.glb",
+   "herniationView": "herniation_tonsillar",
+   "copySides": [
+    "L",
+    "R"
+   ]
+  },
+  {
+   "id": "pf_vermis__hn_tonsillar",
+   "name": "Vermis",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_vermis__hn_tonsillar.glb",
+   "bytes": 84080,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.496 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 751 vertices still in an artery's way and the 818 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; the far lateral slider lifts the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline, and its second slider draws them 8 mm straight back; shapes, not a simulation of the tissue. In the tonsillar herniation view its slider moves it down through the foramen magnum with the tonsils (by up to 5.2 mm at full; skullbase_v3_herniation.py): an illustration drawn by rule, not a simulation.",
+   "centroid": {
+    "L": [
+     -2.92,
+     -55.7,
+     -10.74
+    ],
+    "R": [
+     2.08,
+     -56.36,
+     -10.94
+    ]
+   },
+   "replaces": "pf_vermis",
+   "pushedFrom": "assets/skullbase-v3/pf_vermis.glb",
+   "herniationView": "herniation_tonsillar",
+   "copySides": [
+    "L",
+    "R"
+   ]
+  },
+  {
+   "aliases": [],
+   "type": "soft",
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "fitted",
+   "source": "Z-Anatomy, fitted onto the TopBrain CT and anchored to it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "layer": "tracts",
+   "fitted": true,
+   "id": "tb_posterior_inferior_cerebellar_artery_fitted_course__hn_tonsillar",
+   "name": "Posterior inferior cerebellar artery (fitted course)",
+   "file": "assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course__hn_tonsillar.glb",
+   "bytes": 191208,
+   "system": "Vertebral artery",
+   "morph": true,
+   "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round the outside of the brainstem (11.3 mm on the right, 12.0 mm on the left) to the start of the Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In the tonsillar herniation view its slider moves it with the cerebellum it lies on, as the tonsils go down through the foramen magnum (by up to 9.7 mm at full; skullbase_v3_herniation.py): an illustration drawn by rule, not a simulation.",
+   "centroid": {
+    "L": [
+     -24.03,
+     -55.57,
+     -29.05
+    ],
+    "R": [
+     21.11,
+     -56.17,
+     -30.75
+    ]
+   },
+   "replaces": "tb_posterior_inferior_cerebellar_artery_fitted_course",
+   "pushedFrom": "assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.cleared.glb",
+   "herniationView": "herniation_tonsillar",
+   "copySides": [
+    "L",
+    "R"
+   ]
+  },
+  {
+   "id": "sb_posterior_inferior_cerebellar_artery__hn_tonsillar",
+   "name": "Posterior inferior cerebellar artery",
+   "aliases": [],
+   "type": "tube",
+   "file": "assets/skullbase-v3/sb_posterior_inferior_cerebellar_artery__hn_tonsillar.glb",
+   "bytes": 10088,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Only its origin is shown: its first 6 mm from the vertebral artery. This angiogram labels only the PICA's first part, and this patient's vertebral arteries are long and tortuous: the labelled PICAs leave them near the midline and loop onto the back of the medulla, through where the fitted model's medulla lies; its course on from the origin is the model's typical one (Posterior inferior cerebellar artery (fitted course)). In the telovelar and retrosigmoid views it moves with the cerebellum it lies against, carried by cross-sections along its centre line. In the tonsillar herniation view its slider moves it with the cerebellum it lies on, as the tonsils go down through the foramen magnum (by up to 0.8 mm at full; skullbase_v3_herniation.py): an illustration drawn by rule, not a simulation.",
+   "centroid": {
+    "L": [
+     -9.54,
+     -27.87,
+     -29.88
+    ],
+    "R": [
+     1.78,
+     -22.63,
+     -26.54
+    ]
+   },
+   "system": "Vertebral artery",
+   "intracranialFraction": 1.0,
+   "morph": true,
+   "replaces": "sb_posterior_inferior_cerebellar_artery",
+   "pushedFrom": "assets/skullbase-v3/sb_posterior_inferior_cerebellar_artery.glb",
+   "herniationView": "herniation_tonsillar",
+   "copySides": [
+    "L",
+    "R"
+   ]
+  },
+  {
+   "id": "hn_mcrae_line",
+   "name": "McRae’s line (basion to opisthion)",
+   "aliases": [
+    "McRae's line",
+    "Foramen magnum line"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/hn_mcrae_line.glb",
+   "bytes": 2760,
+   "colour": {
+    "token": "sbMembrane",
+    "light": "#7B3FA0",
+    "dark": "#C08BE0"
+   },
+   "dataset": "rule",
+   "source": "Drawn by rule on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "guide",
+   "schematic": true,
+   "herniationView": "herniation_tonsillar",
+   "centroid": {
+    "L": [
+     -2.06,
+     -21.36,
+     -37.74
+    ],
+    "R": [
+     -0.72,
+     -38.81,
+     -41.84
+    ]
+   },
+   "derivation": "The line from the basion (the clivus's lowest point) to the opisthion (the point of the foramen magnum's posterior rim nearest the basion), both on the occipital bone as drawn here, on its midsagittal slab (36.0 mm long; skullbase_v3_herniation.py), drawn in two halves split at this CT's midline. In the tonsillar herniation view the tonsils' lowest points are measured below it."
   }
  ],
  "arterySystems": [

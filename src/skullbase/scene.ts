@@ -1,6 +1,6 @@
 import type { Look } from '../viewer/materials';
 import { makeCatalog, type MarkerDef, type SceneSource, type ScenePlan, type TractRole } from '../viewer/scene';
-import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './groups';
+import { DEFAULT_GROUP, ownedElsewhere, SB_GROUP, viewGroup } from './groups';
 import { isApproachPart, LANDMARKS, SB, SB_MANIFEST } from './index';
 import { NEEDLE_ID, NEEDLE_NAME } from './trigeminal';
 import type { SkullState } from './state';
@@ -35,11 +35,12 @@ export function skullPlan(grpId: string, sel: string | null, also: readonly stri
   const lmIds = new Set(g.landmarks);
   if (lmSel) lmIds.add(lmSel);
   const st = sel ? SB.get(sel) : undefined;
-  if (st && !(isApproachPart(st) && !inGroup.has(st.id)) && !replaced.has(st.id)) looks.set(st.id, 'primary');
+  // (a view's own items do not show outside it through a selection: groups.ts ownedElsewhere; decodeSkull maps a link's)
+  if (st && !ownedElsewhere(st.id, g) && !replaced.has(st.id)) looks.set(st.id, 'primary');
   // a cranial nerve's own trunk ('Trigeminal nerve (V)'): all of that nerve lights up (its divisions and branches)
   if (st?.cranialNerve && /\([IVX]+\)$/.test(st.name)) {
     // (not a tumour view's moved copy outside its view, nor the part a copy stands in for)
-    for (const x of SB_MANIFEST.structures) if (x.cranialNerve === st.cranialNerve && (!x.pushedFrom || inGroup.has(x.id)) && !replaced.has(x.id)) looks.set(x.id, 'primary');
+    for (const x of SB_MANIFEST.structures) if (x.cranialNerve === st.cranialNerve && !ownedElsewhere(x.id, g) && !replaced.has(x.id)) looks.set(x.id, 'primary');
   }
   // a tumour view: the untouched left half of each part whose moved copy holds the right half only
   const onlySide = new Map<string, 'L' | 'R'>();

@@ -45,7 +45,7 @@ const SECTIONS: { dir: string; box: Box; span: [number, number, number]; midline
 const TRIANGLES = 4, LINES = 1;
 
 interface Volume { file: string; dims: number[]; origin: number[]; spacing: number }
-interface SbStructure { id: string; name: string; file: string; type: string; category?: string; inBone?: { share: number }; approach?: unknown; pushedFrom?: unknown; tumourView?: string; replaces?: string; forView?: unknown }
+interface SbStructure { id: string; name: string; file: string; type: string; category?: string; inBone?: { share: number }; approach?: unknown; pushedFrom?: unknown; tumourView?: string; herniationView?: string; replaces?: string; forView?: unknown }
 // (the manifests as served)
 const served = <T>(name: string): T => JSON.parse(readFileSync(new URL(`assets/${name}`, PUBLIC), 'utf8')) as T;
 const manifest = served<{ volumes: Record<string, Volume> }>('manifest.json');
@@ -76,7 +76,11 @@ describe('every shipped mesh', () => {
           lo[k] = Math.min(lo[k], n.lo[k]); hi[k] = Math.max(hi[k], n.hi[k]);
         }
       }
-      if (nodes.length) bad.push(...sideProblems(nodes, sec.midlineAtZero, /__(men|koos|knosp)_/.test(f)));
+      // (a guide line on the midline, as McRae's line, is drawn in two halves split at this CT's own midline, x −1.4, so
+      // that the right-half setting keeps half of it: both halves lie left of the frame's midline, so only their order
+      // is checked)
+      const guide = sbv3Manifest.structures.some((s) => s.file.endsWith(`/${f}`) && s.category === 'guide' && !!s.herniationView);
+      if (nodes.length) bad.push(...sideProblems(nodes, sec.midlineAtZero && !guide, /__(men|koos|knosp)_/.test(f)));
     }
     for (let k = 0; k < 3; k++) if (hi[k] - lo[k] < sec.span[k]) bad.push(`${dir}: its files reach ${(hi[k] - lo[k]).toFixed(1)} mm along ${'xyz'[k]}, less than ${sec.span[k]}`);
     expect(bad).toEqual([]);

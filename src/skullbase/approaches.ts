@@ -1,6 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import type { SbModel } from './model';
 import { MVD_NOT_SHOWN, MVD_SECTIONS, MVD_SUMMARY, TN_REFS } from './trigeminal-text';
+import { HN_REFS } from './herniation-text';
 
 /**
  * Skull base v3's surgical views: the right pterional, lateral supraorbital (LSO) and parasagittal (interhemispheric)
@@ -23,8 +24,9 @@ export interface ApproachSection {
   claims: ApproachClaim[];
   /** a measurement on this CT shown under the claims (from sbv3-fit.json): M1's length, or the anterior cerebral
    * arteries TopBrain labels; the trigeminal neuralgia views' (from sbv3-trigeminal.json, sb-trigeminal.json): the root
-   * entry zone and its neighbours (tnRoot), the needle (tnNeedle), the foramen ovale (tnOvale) */
-  measured?: 'm1' | 'aca' | 'tonsils' | 'kawase' | 'tnRoot' | 'tnNeedle' | 'tnOvale';
+   * entry zone and its neighbours (tnRoot), the needle (tnNeedle), the foramen ovale (tnOvale); the tonsillar herniation
+   * view's (from sbv3-herniation.json): McRae's line and the tonsils against it (hnTonsillar) */
+  measured?: 'm1' | 'aca' | 'tonsils' | 'kawase' | 'tnRoot' | 'tnNeedle' | 'tnOvale' | 'hnTonsillar';
 }
 export interface ApproachContent {
   /** the content's id: the geometry's (sbv3-approaches.json), unless it borrows another's (geom) */
@@ -239,6 +241,8 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Mincă DI, Rusu MC, Rădoi PM, Hostiuc S, Toader C. A new classification of the anatomical variations of Labbé’s inferior anastomotic vein. Tomography. 2022;8(5):2182–2192. doi:10.3390/tomography8050183.' },
   // the trigeminal neuralgia cards' (trigeminal-text.ts)
   ...TN_REFS,
+  // the tonsillar herniation card's (herniation-text.ts)
+  ...HN_REFS,
 ];
 export const APPROACH_REF = new Map(APPROACH_REFS.map((r) => [r.id, r]));
 

@@ -9,6 +9,8 @@ import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from './foramina';
 import { TB_NOTES } from './temporal';
 import { SB_MODEL, type SbModel } from './model';
 import { TRIGEMINAL } from './trigeminal';
+import { HERNIATION, HN_TONSILLAR } from './herniation';
+import { TONSILLAR_SECTIONS } from './herniation-text';
 
 /**
  * Skull-base section data. Three models share the section's code: the Z-Anatomy model (BodyParts3D, CC BY-SA;
@@ -376,5 +378,54 @@ export function crossCheckSb(): string[] {
       if (!SB_MANIFEST.structures.some((s) => s.name === x.name)) errs.push(`trigeminal: unknown structure ${x.name}`);
     if (SB_MODEL === 'zanatomy' && T.mvd) errs.push('trigeminal: v1 has no decompression view (the owner\'s decision of 26 November 2026)');
   }
+  // the tonsillar herniation view (v3 only): its numbers, its copies (each standing in for a part this model has, with the
+  // view's morph target), its guide, and its card's references
+  const H = HERNIATION?.tonsillar;
+  if (H) {
+    const nums: [string, number][] = [];
+    const walk = (path: string, v: unknown) => {
+      if (typeof v === 'number') nums.push([path, v]);
+      else if (Array.isArray(v)) v.forEach((x, i) => walk(`${path}[${i}]`, x));
+      else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(`${path}.${k}`, x);
+    };
+    walk('tonsillar', H);
+    for (const [path, v] of nums) if (!Number.isFinite(v)) errs.push(`herniation: ${path} is not a finite number`);
+    const P = H.params;
+    if (H.boneVerticesAnyT !== 0) errs.push(`herniation: ${H.boneVerticesAnyT} copy vertices in bone at some slider value`);
+    if (H.boneMeshGapMinMm < P.boneGapMm - 0.01) errs.push(`herniation: a copy comes ${H.boneMeshGapMinMm} mm from the drawn bone, nearer than its gap ${P.boneGapMm} mm`);
+    if (!H.foldFree || H.slopeMax >= P.closingLimit || H.closingPairs !== 0 || H.trianglesTurnedOver !== 0 || P.trianglesNearlyTurnedOver !== 0)
+      errs.push(`herniation: the shape folds (closing at ${H.slopeMax} mm per mm, ${H.closingPairs} pairs, ${H.trianglesTurnedOver} triangles turned over)`);
+    if (H.trianglesTurnedOver !== P.flippedTriangles) errs.push('herniation: the report counts its triangles turned over twice, differently');
+    if (H.structuresEntered.length || H.pathsCrossingAnything !== 0) errs.push(`herniation: the copies enter ${H.structuresEntered.join(', ')} (${H.pathsCrossingAnything} paths crossing)`);
+    // (where a copy already crosses a neighbour at rest, as the fitted parts do, it crosses it no more as the slider moves)
+    for (const [k, w] of Object.entries(P.wallsTouched)) {
+      if (w.maxAnyT > w.rest) errs.push(`herniation: ${k} crosses more as the slider moves (${w.rest} at rest, ${w.maxAnyT} at most)`);
+      for (const id of k.split(' x ').map((x) => x.split(' ')[0].replace(/__hn_tonsillar$/, ''))) if (!ids.has(id)) errs.push(`herniation: ${k} names an unknown structure ${id}`);
+    }
+    // (copies that overlap at rest: no point of either comes newly inside the other, each way on its own; other pairs
+    // cross no more than at rest; the vermis's two halves, one part, are only reported)
+    for (const [k, c] of Object.entries(P.copiesCrossing)) {
+      if (c.rule === 'same part') continue;
+      if (c.rule === 'inside' ? c.newlyInsideMax !== 0 : c.max > c.rest)
+        errs.push(`herniation: copies ${k} overlap more as the slider moves (${c.rule}: ${c.rest} at rest, ${c.max} at most, ${c.newlyInsideMax ?? '-'} newly inside)`);
+    }
+    if (!H.picaOutsideTonsilsAnyT) errs.push('herniation: a posterior inferior cerebellar artery enters the moved tonsils');
+    for (const s of ['L', 'R'] as const) if (!(H.medullaGapBelowLineMm[s] >= 0 && H.medullaGapBelowLineMm[s] <= 0.5)) errs.push(`herniation: the ${s} tonsil below McRae's line is ${H.medullaGapBelowLineMm[s]} mm from the medulla at full`);
+    const cp = H.cameras.posterior;
+    if (!(cp.position[1] < cp.target[1] && cp.position[2] < cp.target[2])) errs.push('herniation: the posterior camera is not behind and below what it looks at');
+    const copies = SB_MANIFEST.structures.filter((s) => s.herniationView && s.pushedFrom);
+    for (const c of H.copies) {
+      const s = SB.get(c.id);
+      if (!s) { errs.push(`herniation: the report's copy ${c.id} is not in the manifest`); continue; }
+      if (s.herniationView !== HN_TONSILLAR.view) errs.push(`herniation: ${c.id} is not for the view ${HN_TONSILLAR.view}`);
+      if (s.replaces !== c.replaces || !ids.has(c.replaces) || SB.get(c.replaces)?.pushedFrom) errs.push(`herniation: ${c.id} replaces ${s.replaces}, not the part ${c.replaces}`);
+      if (!s.morph) errs.push(`herniation: ${c.id} has no morph target`);
+      if (c.id !== `${c.replaces}__hn_tonsillar`) errs.push(`herniation: ${c.id} is not named for the part it replaces`);
+    }
+    for (const s of copies) if (!H.copies.some((c) => c.id === s.id)) errs.push(`herniation: the copy ${s.id} is not in the report`);
+    const guide = SB.get(HN_TONSILLAR.guide);
+    if (!guide || guide.category !== 'guide' || guide.herniationView !== HN_TONSILLAR.view) errs.push(`herniation: no guide ${HN_TONSILLAR.guide} for the view`);
+    for (const cl of TONSILLAR_SECTIONS.flatMap((x) => x.claims)) for (const r of cl.refIds) if (!APPROACH_REF.has(r)) errs.push(`herniation: unknown refId ${r}`);
+  } else if (SB_MANIFEST.structures.some((s) => s.herniationView)) errs.push(`herniation: the ${SB_MODEL} model has herniation copies but no report`);
   return errs;
 }

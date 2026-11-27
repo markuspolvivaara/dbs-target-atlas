@@ -75,8 +75,9 @@ def by_name(items_list: list) -> dict:
     """The model's own items by name. The tumour views' copies of the brain (skullbase_v3_tumours.py: the same name,
     pushed aside by a tumour, "tumourView") are left out: taken by name, the last copy listed stood in for the
     hindbrain, and the arteries, which do not move with a tumour, were judged against the cerebellum as the
-    petroclival meningioma pushes it (the fitted PICA "30 % inside the cerebellum"; against the cerebellum itself 8 %)."""
-    return {it["name"]: it for it in items_list if not it.get("tumourView")}
+    petroclival meningioma pushes it (the fitted PICA "30 % inside the cerebellum"; against the cerebellum itself 8 %).
+    The herniation views' copies (skullbase_v3_herniation.py, "herniationView") are left out alike."""
+    return {it["name"]: it for it in items_list if not (it.get("tumourView") or it.get("herniationView"))}
 
 
 BONE_BOX = ((-80.0, 80.0), (-110.0, 60.0), (-60.0, 45.0))   # where vessels and nerves are measured against the drawn bone (frame mm)
@@ -138,7 +139,7 @@ def bone_contact(items_list: list) -> dict:
     print("drawn bone:", bone.source)
     out = {}
     for it in items_list:
-        if it.get("category") not in ("artery", "vein", "nerve") or it.get("tumourView") or it.get("approach"):
+        if it.get("category") not in ("artery", "vein", "nerve") or it.get("tumourView") or it.get("herniationView") or it.get("approach"):
             continue
         f = DATA / (it.get("joinedFrom") or it["file"]).replace("assets/", "")
         if not f.exists():
@@ -496,7 +497,7 @@ def clear(items_list: list) -> dict:
     fields = {sh: Field(sol, bone) for sh, sol in hind.items()}
     report, own = {}, []
     for it in items_list:
-        if it.get("category") != "artery" or it.get("tumourView"):     # (a tumour view's copy is made later, from the cleared file)
+        if it.get("category") != "artery" or it.get("tumourView") or it.get("herniationView"):     # (a tumour or herniation view's copy is made later, from the cleared file)
             continue
         nodes = read_glb_full(file_of(it))
         fitted = it.get("fitted") or it.get("dataset") == "fitted"
@@ -545,7 +546,7 @@ def check(items_list: list) -> list[tuple[bool, str]]:
     solids = hindbrain(by, shown)
     out = []
     for it in items_list:
-        if it.get("category") != "artery" or it.get("tumourView"):     # (a tumour view's copy is made later, from the cleared file)
+        if it.get("category") != "artery" or it.get("tumourView") or it.get("herniationView"):     # (a tumour or herniation view's copy is made later, from the cleared file)
             continue
         nodes = read_glb_full(shown(it))
         worst = max(float(solid.depth(Q).max()) for nd in nodes.values() for Q in states(nd))

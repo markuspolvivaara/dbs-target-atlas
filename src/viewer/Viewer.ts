@@ -535,8 +535,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const c = this.colour(meta);
     const mats = { solid: solidMaterial(c), rim: rimMaterial(c) };
     const surface = meta.type === 'surface';
-    // a tumour (skull base) cut at a section shows its inside in its own colour, darker, so the cut reads as solid
-    const cutShown = meta.category === 'tumour';
+    // a tumour (skull base) cut at a section shows its inside in its own colour, darker, so the cut reads as solid; so
+    // does a herniation view's moved copy (the tonsils cut by its sagittal section), drawn in that view only
+    const cutShown = meta.category === 'tumour' || (!!meta.herniationView && meta.type !== 'tube');
     const nodes: MeshItem['nodes'] = {};
     for (const side of ['L', 'R'] as Side[]) {
       const m = a.sides[side];

@@ -513,6 +513,14 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   nuclei; the obex at the floor's caudal tip, the median sulcus at the colliculi's level) and carried into this CT with
   the fitted ventricle, vertex for vertex: the model's, not this patient's. Their cards cite Erginoglu 2026 (the floor's
   morphometry in 40 brainstems) and Zhuang 2021.
+- **Herniation shapes** (`pipeline/skullbase_v3_herniation.py`, after the tumours step; run it under a memory cap,
+  `systemd-run --user --scope -q -p MemoryMax=6G -p MemorySwapMax=0 …`, about 40 minutes): copies of the parts a
+  herniation moves, drawn in their view only, each with one morph target (the view's slider, an illustration, not a
+  simulation), and the report `src/data/generated/sbv3-herniation.json`. So far the tonsillar shape: the tonsils drawn
+  down through the foramen magnum against the back of the medulla, McRae's line as a guide. Every check runs on the
+  moves as shipped at 20 slider values; the step writes nothing if one fails. Then `node pipeline/compress.mjs
+  skullbase-v3 <the files it names>` and `pipeline/skullbase_v3.py finalize`; rerun it after the tumours step whenever
+  the v3 chain runs.
 - **Trigeminal neuralgia views** (`pipeline/skullbase_trigeminal.py`, run by hand after the models are built; it reads
   the shipped meshes through `pipeline/glb_dump.mjs` and writes only `src/data/generated/sbv3-trigeminal.json` and
   `sb-trigeminal.json`): for the microvascular decompression (v3 only) the root entry zone where the drawn nerve meets
