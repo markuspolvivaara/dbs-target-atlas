@@ -3,5 +3,6 @@ import definitions from '../data/generated/sbv3-definitions.json';
 import landmarks from '../data/generated/sbv3-landmarks.json';
 import manifest from '../data/generated/sbv3-manifest.json';
 import trigeminal from '../data/generated/sbv3-trigeminal.json';
+import herniation from '../data/generated/sbv3-herniation.json';
 
-export default { manifest: manifest as unknown, landmarks: landmarks as unknown, definitions: definitions as unknown, regions: [] as unknown, trigeminal: trigeminal as unknown };
+export default { manifest: manifest as unknown, landmarks: landmarks as unknown, definitions: definitions as unknown, regions: [] as unknown, trigeminal: trigeminal as unknown, herniation: herniation as unknown };

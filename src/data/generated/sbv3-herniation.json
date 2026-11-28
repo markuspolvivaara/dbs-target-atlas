@@ -1,0 +1,400 @@
+{
+ "tonsillar": {
+  "descentMm": 8.0,
+  "basion": [
+   -2.74,
+   -12.63,
+   -35.69
+  ],
+  "opisthion": [
+   -0.05,
+   -47.54,
+   -43.88
+  ],
+  "mcraeLengthMm": 35.96,
+  "tonsilTips": {
+   "rest": {
+    "L": {
+     "point": [
+      -8.09,
+      -41.39,
+      -41.51
+     ],
+     "belowLineMm": -0.91
+    },
+    "R": {
+     "point": [
+      4.47,
+      -41.35,
+      -42.0
+     ],
+     "belowLineMm": -0.42
+    }
+   },
+   "full": {
+    "L": {
+     "point": [
+      -6.71,
+      -35.76,
+      -49.48
+     ],
+     "belowLineMm": 8.14
+    },
+    "R": {
+     "point": [
+      2.8,
+      -33.13,
+      -48.55
+     ],
+     "belowLineMm": 7.84
+    }
+   }
+  },
+  "medullaGapMm": {
+   "rest": 1.68,
+   "full": 0.43,
+   "minAnyT": 0.43
+  },
+  "medullaGapBelowLineMm": {
+   "L": 0.45,
+   "R": 0.43
+  },
+  "boneVerticesAnyT": 0,
+  "boneMeshGapMinMm": 0.32,
+  "boneMeshNearAtRest": {
+   "pointsStartingNearer": 0,
+   "leastGapMm": null,
+   "mostCloserThanAtRestMm": 0.0
+  },
+  "foldFree": true,
+  "slopeMax": 0.83,
+  "trianglesTurnedOver": 0,
+  "closingPairs": 0,
+  "copies": [
+   {
+    "id": "pf_tonsil__hn_tonsillar",
+    "replaces": "pf_tonsil",
+    "name": "Tonsil of cerebellum",
+    "maxMoveMm": 10.91
+   },
+   {
+    "id": "pf_cerebellar_hemisphere__hn_tonsillar",
+    "replaces": "pf_cerebellar_hemisphere",
+    "name": "Cerebellar hemisphere",
+    "maxMoveMm": 5.41
+   },
+   {
+    "id": "pf_vermis__hn_tonsillar",
+    "replaces": "pf_vermis",
+    "name": "Vermis",
+    "maxMoveMm": 5.25
+   },
+   {
+    "id": "tb_posterior_inferior_cerebellar_artery_fitted_course__hn_tonsillar",
+    "replaces": "tb_posterior_inferior_cerebellar_artery_fitted_course",
+    "name": "Posterior inferior cerebellar artery (fitted course)",
+    "maxMoveMm": 9.69
+   },
+   {
+    "id": "sb_posterior_inferior_cerebellar_artery__hn_tonsillar",
+    "replaces": "sb_posterior_inferior_cerebellar_artery",
+    "name": "Posterior inferior cerebellar artery",
+    "maxMoveMm": 0.81
+   }
+  ],
+  "picaOutsideTonsilsAnyT": true,
+  "structuresEntered": [],
+  "pathsCrossingAnything": 0,
+  "cameras": {
+   "sagittal": {
+    "position": [
+     -85.93,
+     -31.41,
+     -34.97
+    ],
+    "target": [
+     0.0,
+     -31.41,
+     -34.97
+    ]
+   },
+   "posterior": {
+    "position": [
+     -0.19,
+     -59.7,
+     -106.78
+    ],
+    "target": [
+     -0.19,
+     -33.47,
+     -34.71
+    ]
+   }
+  },
+  "params": {
+   "descentAlongCanalMm": 9.84,
+   "reachMm": 20.0,
+   "squeeze": 0.25,
+   "forwardMm": 3.0,
+   "pressMm": {
+    "L": 3.94,
+    "R": 7.11
+   },
+   "pressFullMm": 3.0,
+   "pressTopMm": 10.0,
+   "boneGapMm": 0.3,
+   "stemGapMm": 0.25,
+   "vertebralGapMm": 0.3,
+   "riseMm": 30.0,
+   "behindSlope": 0.4,
+   "aheadSlope": 3.0,
+   "sideSlope": 0.8,
+   "vertebralSlope": 1.0,
+   "closingLimit": 1.0,
+   "checkedAt": [
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+   ],
+   "inBoneAtRest": 3,
+   "stretchMax": 3.01,
+   "flippedTriangles": 0,
+   "trianglesNearlyTurnedOver": 0,
+   "sliverMm": 0.035,
+   "flipMarginMm": 0.03,
+   "sliverTriangles": 98,
+   "tubeTrianglesTurnedOver": 10,
+   "down": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "pointsCutShort": 6539,
+   "pointsHeldByChecks": 8414,
+   "wallsChecked": 141,
+   "posteriorElevationDeg": 70,
+   "posteriorSees": {
+    "opisthion": true,
+    "rim L": true,
+    "rim R": true,
+    "tip L rest": true,
+    "tip R rest": true,
+    "tip L full": true,
+    "tip R full": true,
+    "line 0.1": true,
+    "line 0.3": true,
+    "line 0.5": true,
+    "line 0.7": true,
+    "line 0.9": true
+   },
+   "picaPointsInTonsils": {
+    "0.0": 0,
+    "0.25": 0,
+    "0.5": 0,
+    "0.75": 0,
+    "1.0": 0
+   },
+   "copiesCrossing": {
+    "pf_cerebellar_hemisphere L x pf_cerebellar_hemisphere R": {
+     "rule": "inside",
+     "rest": 889,
+     "full": 889,
+     "max": 889,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 849,
+     "crossingTrianglesFull": 849
+    },
+    "pf_cerebellar_hemisphere L x pf_vermis L": {
+     "rule": "inside",
+     "rest": 3209,
+     "full": 3207,
+     "max": 3209,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 1811,
+     "crossingTrianglesFull": 1815
+    },
+    "pf_cerebellar_hemisphere L x pf_vermis R": {
+     "rule": "inside",
+     "rest": 2181,
+     "full": 2180,
+     "max": 2181,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 158,
+     "crossingTrianglesFull": 158
+    },
+    "pf_cerebellar_hemisphere L x tb_posterior_inferior_cerebellar_artery_fitted_course L": {
+     "rule": "inside",
+     "rest": 296,
+     "full": 286,
+     "max": 294,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 2144,
+     "crossingTrianglesFull": 2078
+    },
+    "pf_cerebellar_hemisphere R x pf_vermis L": {
+     "rule": "inside",
+     "rest": 2165,
+     "full": 2165,
+     "max": 2165,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 69,
+     "crossingTrianglesFull": 69
+    },
+    "pf_cerebellar_hemisphere R x pf_vermis R": {
+     "rule": "inside",
+     "rest": 3114,
+     "full": 3114,
+     "max": 3114,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 1859,
+     "crossingTrianglesFull": 1859
+    },
+    "pf_cerebellar_hemisphere R x tb_posterior_inferior_cerebellar_artery_fitted_course R": {
+     "rule": "inside",
+     "rest": 184,
+     "full": 174,
+     "max": 183,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 2070,
+     "crossingTrianglesFull": 2207
+    },
+    "pf_tonsil L x pf_cerebellar_hemisphere L": {
+     "rule": "inside",
+     "rest": 1182,
+     "full": 1179,
+     "max": 1182,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 483,
+     "crossingTrianglesFull": 484
+    },
+    "pf_tonsil L x pf_vermis L": {
+     "rule": "inside",
+     "rest": 372,
+     "full": 368,
+     "max": 371,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 281,
+     "crossingTrianglesFull": 282
+    },
+    "pf_tonsil R x pf_cerebellar_hemisphere R": {
+     "rule": "inside",
+     "rest": 1182,
+     "full": 1179,
+     "max": 1182,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 482,
+     "crossingTrianglesFull": 483
+    },
+    "pf_tonsil R x pf_vermis R": {
+     "rule": "inside",
+     "rest": 361,
+     "full": 356,
+     "max": 361,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 279,
+     "crossingTrianglesFull": 280
+    },
+    "pf_vermis L x pf_vermis R": {
+     "rule": "same part",
+     "rest": 181,
+     "full": 225,
+     "max": 225
+    },
+    "pf_vermis R x tb_posterior_inferior_cerebellar_artery_fitted_course R": {
+     "rule": "inside",
+     "rest": 1,
+     "full": 0,
+     "max": 1,
+     "newlyInsideMax": 0,
+     "crossingTrianglesRest": 70,
+     "crossingTrianglesFull": 70
+    },
+    "tb_posterior_inferior_cerebellar_artery_fitted_course L x sb_posterior_inferior_cerebellar_artery L": {
+     "rule": "crossings",
+     "rest": 22,
+     "full": 22,
+     "max": 22
+    }
+   },
+   "wallsTouched": {
+    "pf_cerebellar_hemisphere__hn_tonsillar L x pf_pons L": {
+     "rest": 34,
+     "full": 34,
+     "maxAnyT": 34
+    },
+    "pf_cerebellar_hemisphere__hn_tonsillar L x pf_superior_cerebellar_peduncle L": {
+     "rest": 59,
+     "full": 59,
+     "maxAnyT": 59
+    },
+    "pf_cerebellar_hemisphere__hn_tonsillar L x tb_anterior_inferior_cerebellar_artery L": {
+     "rest": 23,
+     "full": 23,
+     "maxAnyT": 23
+    },
+    "pf_cerebellar_hemisphere__hn_tonsillar R x pf_pons R": {
+     "rest": 123,
+     "full": 120,
+     "maxAnyT": 121
+    },
+    "pf_cerebellar_hemisphere__hn_tonsillar R x pf_superior_cerebellar_peduncle R": {
+     "rest": 69,
+     "full": 65,
+     "maxAnyT": 69
+    },
+    "pf_cerebellar_hemisphere__hn_tonsillar R x tb_anterior_inferior_cerebellar_artery R": {
+     "rest": 78,
+     "full": 78,
+     "maxAnyT": 78
+    },
+    "pf_tonsil__hn_tonsillar L x pf_fourth_ventricle L": {
+     "rest": 38,
+     "full": 37,
+     "maxAnyT": 38
+    },
+    "pf_tonsil__hn_tonsillar L x pf_pons L": {
+     "rest": 25,
+     "full": 24,
+     "maxAnyT": 25
+    },
+    "pf_tonsil__hn_tonsillar R x pf_fourth_ventricle R": {
+     "rest": 71,
+     "full": 71,
+     "maxAnyT": 71
+    },
+    "pf_tonsil__hn_tonsillar R x pf_pons R": {
+     "rest": 32,
+     "full": 31,
+     "maxAnyT": 31
+    },
+    "sb_posterior_inferior_cerebellar_artery__hn_tonsillar L x tb_anterior_spinal_artery L": {
+     "rest": 15,
+     "full": 15,
+     "maxAnyT": 15
+    },
+    "tb_posterior_inferior_cerebellar_artery_fitted_course__hn_tonsillar R x tb_glossopharyngeal_nerve_ix R": {
+     "rest": 8,
+     "full": 8,
+     "maxAnyT": 8
+    }
+   }
+  }
+ }
+}

@@ -220,6 +220,10 @@ export const ManifestStructureSchema = z.object({
   tumourView: z.string().optional(),
   /** skull base v3: a copy for one surgical view only (the temporal lobe held up in the Kawase view), with `replaces` */
   forView: z.string().optional(),
+  /** skull base v3: drawn only in this herniation view ('herniation_tonsillar'): a moved copy of a part (with `replaces`,
+   *  `pushedFrom`, `copySides` and one morph target named for the view's shape: at 0 the part as it is, at 1 the shape
+   *  drawn by rule) or a guide drawn for it (McRae's line) */
+  herniationView: z.string().optional(),
   /** a copy's source: the structure's own file it was made from (shipped) */
   pushedFrom: z.string().optional(),
   /** skull base: the halves a tumour view's moved copy holds, where it holds both (a midline tumour's vessels); without

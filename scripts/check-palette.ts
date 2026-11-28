@@ -194,6 +194,11 @@ for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNer
   // theme is too close to the walls' sbDura)
   ['skull base v3: trigeminal, percutaneous', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbDura', 'sbMedialWall']],
   ['skull base v1: trigeminal, percutaneous', ['sbBone', 'sbArtery', 'sbNerve', 'sbSoft', 'sbMedialWall']],
+  // the tonsillar herniation view (v3): the posterior fossa's contents (the tonsils apart, the fourth ventricle) with the
+  // vertebral, basilar, posterior and anterior inferior cerebellar and anterior spinal arteries, the lower cranial nerves,
+  // the bone see-through, and McRae's line (purple, sbMembrane: at least ΔE00 14 from every colour here in both themes and
+  // the three deficiencies; sbGuide is too close to sbCsf for a protanope in the dark theme, sbMedialWall to sbBrainstem)
+  ['skull base v3: tonsillar herniation', ['sbBone', 'sbArtery', 'sbNerve', 'sbBrain', 'sbTonsil', 'sbBrainstem', 'sbCsf', 'sbMembrane']],
   ['vascular: lesions', ['sbBone', 'sbArtery', 'sbVein', 'sbBrain', 'sbInsula', 'sbMedialWall', 'vaAneurysm', 'vaNidus', 'vaDevice']],
   ['cortex: functions', ['ctx', 'ctxA1', 'ctxACC', 'ctxBroca', 'ctxM1', 'ctxPM', 'ctxPMv', 'ctxPreSMA', 'ctxS1', 'ctxSMA', 'ctxV1', 'ctxVMPFC', 'ctxWernicke']]] as const) {
   for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {

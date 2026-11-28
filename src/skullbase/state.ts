@@ -3,7 +3,7 @@ import { DEFAULT_LEAD, type LayerKey } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { decodeOpacity, encodeOpacity } from '../viewer/scene';
 import { decodeCamera, decodeMeasure, encodeMeasure, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeHemi, encodeHidden, encodeLayers, hashOf, r1, readHash } from '../viewlink';
-import { combinedCut, DEFAULT_GROUP, SB_GROUP } from './groups';
+import { combinedCut, DEFAULT_GROUP, SB_GROUP, selIn, viewGroup } from './groups';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type SkullPage = 'atlas' | 'grading' | 'sources' | 'credits';
@@ -36,8 +36,10 @@ export interface SkullState extends ViewState {
   ts: number;
 }
 
-/** the surgical shapes and their URL parameters (op=0..100 and so on) */
-export const MORPH_PARAMS: Record<string, string> = { open: 'op', lift: 'lf', lsoLift: 'll', interhemispheric: 'ih', telovelar: 'tv', retrosigmoid: 'rs', farLateral: 'fl', farLateralBack: 'fb', clinoid: 'ac', ridge: 'sr', subtemporal: 'st' };
+/** the surgical shapes, and the herniation view's, and their URL parameters (op=0..100 and so on) */
+export const MORPH_PARAMS: Record<string, string> = { open: 'op', lift: 'lf', lsoLift: 'll', interhemispheric: 'ih', telovelar: 'tv', retrosigmoid: 'rs', farLateral: 'fl', farLateralBack: 'fb', clinoid: 'ac', ridge: 'sr', subtemporal: 'st',
+  // (the tonsillar herniation view's illustrated shape)
+  tonsillar: 'to' };
 
 export const SKULL_PRESETS: CameraPreset[] = ['axial', 'inferior', 'lateral', 'coronal', 'posteriorOblique', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal',
   'pterional', 'orbitozygomaticFront', 'vertexFront', 'retrosigmoidLateral', 'farLateralLow', 'retrosigmoidLevel', 'subtemporalLow', 'aim'];
@@ -107,7 +109,8 @@ export function decodeSkull(hash: string): SkullState {
   s.also = g.kind !== 'system' ? [] : [...new Set((p.get('with') ?? '').split(','))]
     .filter((id) => id !== g.id && SB_GROUP.get(id)?.kind === 'system');
   if (s.also.length) s.cutAbove = combinedCut([g.id, ...s.also]);
-  s.sel = p.get('sel');
+  // (another view's own item, a herniation or tumour view's copy say, stands for its part here, or for nothing)
+  s.sel = selIn(p.get('sel'), viewGroup(g.id, s.also));
   { const fr = p.get('fr'); s.from = fr && /^[a-z0-9_]+$/.test(fr) ? fr : null; }
   { const t = p.get('tour'); s.tour = t && /^[a-z0-9_-]+$/.test(t) ? t : null; }
   { const n = parseInt(p.get('ts') ?? '', 10); s.ts = Number.isFinite(n) && n >= 1 ? n : 1; }

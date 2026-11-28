@@ -6,7 +6,9 @@ import { CAVERNOUS } from './cavernous';
 import { TUMOUR_FIT, TUMOURS, tumourGroupId, type TumourFamily } from './tumours';
 import { APPROACH_GEOM, isApproachPart, kindOf, LANDMARKS, REGIONS, SB, SB_MANIFEST, SB_MODEL } from './index';
 import { PERC_SUMMARY } from './trigeminal-text';
+import { TONSILLAR_SUMMARY } from './herniation-text';
 import { TRIGEMINAL, type NeedlePath } from './trigeminal';
+import { HERNIATION, HN_SAGITTAL_CUT_X, HN_TONSILLAR, hnPose } from './herniation';
 
 /**
  * Groups of the skull-base page, all derived from the model itself: measured neighbourhoods of key
@@ -15,7 +17,7 @@ import { TRIGEMINAL, type NeedlePath } from './trigeminal';
  */
 export interface SbGroup {
   id: string;
-  kind: 'overview' | 'region' | 'system' | 'bone' | 'approach' | 'tumour';
+  kind: 'overview' | 'region' | 'system' | 'bone' | 'approach' | 'tumour' | 'herniation';
   name: string;
   description: string;
   /** structures drawn highlighted (bones solid, vessels and nerves as lines) */
@@ -41,8 +43,8 @@ export interface SbGroup {
   /** structures of the group drawn see-through in their colour: a sinus round what it holds (ghost), its walls round it (shell) */
   ghost?: string[];
   shell?: string[];
-  /** the sourced card the view carries (skullbase/approaches.ts, trigeminal-text.ts) */
-  info?: 'endonasal' | 'cavernous' | 'percutaneous';
+  /** the sourced card the view carries (skullbase/approaches.ts, trigeminal-text.ts, herniation-text.ts) */
+  info?: 'endonasal' | 'cavernous' | 'percutaneous' | 'tonsillar';
   /** structures (ids) the panel lists first, in order ("In focus") */
   key?: string[];
   /** camera 'aim': where the camera opens, exactly (a place measured on the model: the decompression's inside the
@@ -57,6 +59,8 @@ export interface SbGroup {
   morphDefault?: Record<string, number>;
   /** a section the view is cut at (everything on the normal's side of the point removed), while the reader keeps it on */
   section?: { normal: V3; point: V3 };
+  /** a herniation view (v3): the shape it illustrates (its slider's morph target, which only its copies carry) */
+  herniation?: 'tonsillar';
   /** a tumour view's parts moved by the tumour: [the part, its moved copy]; the copies hold the right half only, so
    * the part's left half is drawn beside them (the site audit's MC-18); not a copy that holds both (copySides) */
   keepLeft?: [string, string][];
@@ -84,8 +88,9 @@ const FLOOR_POINTS = ['Foramen caecum of frontal bone', 'Sphenoidal yoke', 'Limb
   'Basilar part of occipital bone', 'Tegmen tympani', 'Arcuate eminence', 'Internal occipital protuberance', 'Groove for transverse sinus'];
 
 /** Skull base v3's views: this CT's skull base with its anatomy made to fit it, the ears' contents seen through the bone. */
-/** the structures the views list: not the parts of the fitted brain pushed aside by a tumour (for its view only) */
-const OWN = SB_MANIFEST.structures.filter((s) => !s.pushedFrom);
+/** the structures the views list: not the parts of the fitted brain pushed aside by a tumour or moved by a herniation
+ * view's shape (for that view only), nor what a herniation view draws for itself (McRae's line) */
+const OWN = SB_MANIFEST.structures.filter((s) => !s.pushedFrom && !s.herniationView);
 const PUSHED = SB_MANIFEST.structures.filter((s) => s.pushedFrom);
 const HOLDS_LEFT = new Set(PUSHED.filter((s) => s.copySides?.includes('L')).map((s) => s.id));
 
@@ -162,6 +167,45 @@ function percutaneousGroup(): SbGroup | null {
     aim: { position: T.needle.views.overview.position as V3, target: T.needle.views.overview.target as V3 },
     needle: T.needle,
   };
+}
+
+/** Tonsillar herniation (v3 only; module plan A5, the owner's decisions of 26 November 2026): the posterior fossa's
+ * contents with the vertebral, posterior and anterior inferior cerebellar arteries and the lower cranial nerves in this
+ * CT's skull (see-through), the tonsils, the lower cerebellum and the arteries on them drawn as copies for this view only
+ * (skullbase_v3_herniation.py), each with the morph target 'tonsillar' (0 the parts as they are, 1 the shape drawn by rule), and McRae's line drawn from the
+ * basion to the opisthion. Seen from the left with the left half cut away (a sagittal section just left of the
+ * midline), so that the right tonsil shows against the line; its card (herniation-text.ts) can turn to a view from
+ * behind and below. An illustration, not a simulation. */
+function herniationGroups(): SbGroup[] {
+  const H = HERNIATION?.tonsillar;
+  if (!H) return [];
+  const { view, name, morph, guide } = HN_TONSILLAR;
+  const copies = new Map(PUSHED.filter((s) => s.herniationView === view && s.replaces).map((s) => [s.replaces!, s.id]));
+  const byName = (...ns: string[]) => [...new Set(ns.flatMap((n) => OWN.filter((s) => s.name === n).map((s) => s.id)))];
+  const fossa = OWN.filter((s) => ['hindbrain', 'ventricle'].includes(kindOf(s))).map((s) => s.id);
+  // (the anterior inferior cerebellar artery and the lower cranial nerves too: the shape is cut short at every structure
+  // near the copies, these among them, and enters none: sbv3-herniation.json structuresEntered)
+  const vessels = byName('Vertebral artery', 'Basilar artery', 'Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)',
+    'Anterior spinal artery', 'Anterior inferior cerebellar artery',
+    'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Hypoglossal nerve (XII)');
+  const swap = (ids: string[]) => ids.map((id) => copies.get(id) ?? id);
+  const guides = SB_MANIFEST.structures.filter((s) => s.herniationView === view && !s.pushedFrom).map((s) => s.id);
+  return [{
+    id: view, kind: 'herniation', name, herniation: 'tonsillar', info: 'tonsillar',
+    camera: 'aim', aim: hnPose(H.cameras.sagittal),
+    hemi: 'both', cutAbove: null, boneLook: 'shell', focus: null, radius: 40,
+    focusIds: swap(byName('Tonsil of cerebellum', 'Medulla oblongata')),
+    description: TONSILLAR_SUMMARY,
+    structures: [...swap([...fossa, ...vessels]), ...guides],
+    // (the medulla and the fourth ventricle see-through: McRae's line crosses the foramen magnum through the medulla, and
+    // from the left the ventricle lies over the top of the tonsils)
+    ghost: byName('Medulla oblongata', 'Fourth ventricle'),
+    key: [...swap(byName('Tonsil of cerebellum', 'Medulla oblongata', 'Posterior inferior cerebellar artery (fitted course)', 'Vertebral artery')), ...guides.filter((id) => id === guide)],
+    landmarks: [],
+    morphs: [morph], morphDefault: { [morph]: 1 },
+    // (the left half cut away just left of the midline: McRae's line, drawn on the CT's midline left of the frame's, kept whole)
+    section: { normal: [-1, 0, 0], point: [HN_SAGITTAL_CUT_X, 0, 0] },
+  }];
 }
 
 function temporalGroups(): SbGroup[] {
@@ -260,6 +304,7 @@ function temporalGroups(): SbGroup[] {
       landmarks: lm('Superior orbital fissure', 'Foramen rotundum', 'Foramen ovale', 'Foramen lacerum', 'Optic canal'),
     },
     ...tumours,
+    ...herniationGroups(),
   ];
 }
 
@@ -442,11 +487,42 @@ export function crossCheckGroups(): string[] {
     // what the needle's read-out names as near it, the view draws
     const drawn = new Set(g.structures.map((id) => SB.get(id)?.name));
     for (const n of g.needle?.nearest ?? []) if (!drawn.has(n.name)) errs.push(`view ${g.id}: the needle's read-out names ${n.name}, which the view does not draw`);
+    // a herniation view's copies and guide are drawn in that view only; there, each copy stands in for its part, which
+    // the view does not draw, and every part the view draws that has a copy for it is drawn as the copy
+    for (const id of g.structures) {
+      const s = SB.get(id);
+      if (s?.herniationView && s.herniationView !== g.id) errs.push(`view ${g.id}: draws ${id}, which is for the view ${s.herniationView} only`);
+    }
+    if (g.kind === 'herniation') {
+      const copies = PUSHED.filter((s) => s.herniationView === g.id);
+      if (!copies.length) errs.push(`view ${g.id}: no copies`);
+      for (const c of copies) {
+        if (!g.structures.includes(c.id)) errs.push(`view ${g.id}: its copy ${c.id} is not drawn`);
+        if (g.structures.includes(c.replaces ?? '')) errs.push(`view ${g.id}: draws ${c.replaces} beside its copy ${c.id}`);
+        if (!c.morph) errs.push(`view ${g.id}: its copy ${c.id} has no morph target`);
+      }
+      if (!g.structures.some((id) => SB.get(id)?.category === 'guide' && SB.get(id)?.herniationView === g.id)) errs.push(`view ${g.id}: no guide`);
+      if (!g.morphs?.length || g.morphs.some((m) => !g.morphDefault?.[m])) errs.push(`view ${g.id}: its shape does not open at full`);
+    }
   }
   return errs;
 }
 /** the group a page opens on */
 export const DEFAULT_GROUP = SB_GROUPS[0].id;
+
+/** A view's own items (a surgical view's parts, a tumour, surgical or herniation view's moved copies, a herniation view's
+ * guide) are drawn in the views that list them only: is this one such an item, and not in the view g? */
+export function ownedElsewhere(id: string, g: SbGroup): boolean {
+  const s = SB.get(id);
+  return !!s && (isApproachPart(s) || !!s.pushedFrom || !!s.herniationView) && !g.structures.includes(id);
+}
+/** What a link's selection stands for in the view g: itself, or, for another view's own item, the part it is a copy of
+ * (when g may show that part), or nothing (the viewer draws whatever is selected, so the item would show outside its view). */
+export function selIn(sel: string | null, g: SbGroup): string | null {
+  if (!sel || !ownedElsewhere(sel, g)) return sel;
+  const part = SB.get(sel)?.replaces;
+  return part && !ownedElsewhere(part, g) ? part : null;
+}
 
 /** Systems shown together: the first one's camera, side and focus; the others' structures and landmarks added to it. */
 export function viewGroup(grp: string, also: readonly string[] = []): SbGroup {

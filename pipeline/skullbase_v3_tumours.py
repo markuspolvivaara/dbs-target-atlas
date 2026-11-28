@@ -1183,7 +1183,7 @@ def displaced_vessels(tag: str, what: str, tumour: np.ndarray, gr: Grid, man: li
 def main() -> int:
     import skullbase_v3 as V3
     man = json.loads((GEN / f"{PREFIX}-manifest.json").read_text())["structures"]
-    man = [it for it in man if not (it["id"].startswith("tm_") or it.get("tumourView"))]
+    man = [it for it in man if not (it["id"].startswith("tm_") or it.get("tumourView") or it.get("herniationView"))]
     for f in V3_BUILD.glob("tm_*.glb"):
         f.unlink()
     for f in [*V3_BUILD.glob("*__koos_*.glb"), *V3_BUILD.glob("*__men_*.glb")]:
@@ -1276,7 +1276,9 @@ def main() -> int:
 
 
 def merge() -> None:
-    """The tumours' items into v3's manifest (skullbase_v3_endonasal.carry_sellar does this too when it is run again)."""
+    """The tumours' items into v3's manifest (skullbase_v3_endonasal.carry_sellar does this too when it is run again).
+    The herniation views' items (skullbase_v3_herniation.py) are kept, and put back after the tumours', where that
+    step puts them."""
     p = GEN / f"{PREFIX}-manifest.json"
     m = json.loads(p.read_text())
     new = json.loads(TM_ITEMS.read_text()) if TM_ITEMS.exists() else []
@@ -1286,6 +1288,8 @@ def merge() -> None:
             it["bytes"] = f.stat().st_size
     ids = {it["id"] for it in new}
     m["structures"] = [s for s in m["structures"] if s["id"] not in ids and not s["id"].startswith("tm_") and not s.get("tumourView")] + new
+    hn = [s for s in m["structures"] if s.get("herniationView")]
+    m["structures"] = [s for s in m["structures"] if not s.get("herniationView")] + hn
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
 
 

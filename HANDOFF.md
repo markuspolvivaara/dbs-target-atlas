@@ -289,6 +289,59 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## Tonsillar herniation on skull base v3 (module plans, Part A, addition 5, PR 1 of 3) (desktop, 2026-11-27)
+
+Branch `feat/herniation`, from `main` after PR 59. Addition 5 of `.claude/module-plans-2026-11-24.md`, the herniation
+shapes. **The card's text is for the owner to read before the PR is merged.** The owner's decisions (2026-11-26): three
+PRs, one herniation each (tonsillar first, then uncal, then subfalcine); skull base v3 only for now; displaced copies of
+what is pressed on; the slider labelled plainly as an illustration, not a simulation; for the uncal view v3's tentorium
+drawn by rule, for the subfalcine view the falx's free edge raised by rule (later PRs).
+
+- **The shape** (`pipeline/skullbase_v3_herniation.py`, after the tumours step; it writes copies drawn in this view
+  only, so no brain or posterior fossa step reruns and no shipped original changes): both tonsils drawn down along the
+  back of the medulla until their lowest points lie 8.1 (left) and 7.8 mm (right) below McRae's line at full (the
+  design depth 8 mm, illustrative: no open series gives a depth for acute herniation), narrowed 25 % towards the midline
+  and moved 3 mm towards the basion, the part below the line pressed further until it lies 0.45 and 0.43 mm from the
+  medulla's back (never inside it); the hemispheres and vermis follow, less with distance (none 20 mm away); the
+  posterior inferior cerebellar arteries' loops follow the cerebellum they lie on, held where they leave the vertebral
+  arteries. McRae's line is a guide tube from the basion to the opisthion (two nodes split at this CT's midline, so the
+  right-half setting keeps half of it). Each copy carries `herniationView`, `replaces`, `pushedFrom` and one morph
+  target, `tonsillar`; the report is `src/data/generated/sbv3-herniation.json`.
+- **The checks** (the step fails before writing if any fails; all on the moves as shipped, at t = 0.05 … 1, along each
+  vertex's straight path): 141 neighbouring meshes are walls (0.3 mm to the drawn bone and the vertebral arteries,
+  0.25 mm to everything else); no wall is entered beyond what the fitted parts already overlap at rest; copies that
+  overlap at rest: no point of either comes newly inside the other (each way on its own: a summed count hid one PICA
+  point inside the hemisphere, found by the recheck); no tissue triangle turns over and no two neighbouring points close
+  at 1 mm per mm (largest 0.83); the right tonsil's press must stay under its search limit. Faulty points are held back in
+  rounds. Run: `systemd-run --user --scope -q -p MemoryMax=6G -p MemorySwapMax=0 pipeline/.venv/bin/python -u -I -W
+  ignore pipeline/skullbase_v3_herniation.py` (about 40 minutes, peak about 1.3 GB), then `node pipeline/compress.mjs
+  skullbase-v3 <the six files>` and `skullbase_v3.py finalize` (1308/1308). The memory cap matters: two of today's
+  attempts ran the desktop out of memory (16 worker processes; a 16 GB check harness) and took the session down; the
+  step now streams its checks (at most 250,000 point–triangle pairs at a time, walls split into small triangles).
+- **Rerun traps:** the copy filters in `skullbase_v3_clearance.py`, `skullbase_v3_roots.py`, `skullbase_v3_tumours.py`
+  and `skullbase_v3.py` validate leave the copies out; `skullbase_v3_endonasal.py` `carry_sellar` carries
+  `herniation_items.json`; a rerun of `skullbase_v3.py` deletes the build's `tb_*.glb`, so rerun this step after the
+  tumours step whenever the chain runs.
+- **Sources** (`src/skullbase/herniation-text.ts`): 16 claims, 14 new references (`HN_REFS`, appended to
+  `APPROACH_REFS`; Bruneau 2008 reused). Research with one searcher and one adversarial verifier per herniation type;
+  a drafter used only verified quotes; a reviewer re-read every claim in its full text (eleven corrected, chiefly
+  Chiari I criteria that had read as herniation's, and lost denominators and hedges); all supporting quotes found by
+  the quote script. Dunn 2002 (Cushing's reflex in about a third) is free in PMC but not openly licensed and was not
+  read: given only as Olaru 2024 reports it.
+- **Front end:** a "Herniation" row and the view `herniation_tonsillar` (`src/skullbase/herniation.ts`, groups.ts):
+  the side view from the left with the left half cut away at x −3.5, and a "View from behind and below" camera; the
+  slider "Tonsillar herniation (illustration, not a simulation)" (`to=` in the link); the card with a "Measured on this
+  model" read-out and "How the shape is drawn" from the report's numbers. Copies are drawn only in their view: a
+  `sel=` naming a copy elsewhere selects its original, and the guide nowhere. McRae's line is `sbMembrane` purple (the
+  first grey was too close to the brainstem for protanopia). crossCheckSb checks the report.
+- **Tests:** `tests/unit/brain-herniation.test.ts` (the report; the copies at rest equal their originals; tips, bone at
+  25–100 %, PICA outside the tonsils, the view, the link, `sel=`; named so because `herniation.test.ts` is the spine's
+  disc herniation), `skullbase.test.ts`, `mesh-checks.test.ts` (the herniation guides split at the CT's midline are
+  exempt from the frame-midline rule), and a browser test in `audit-fixes.spec.ts`.
+- **Left:** picture baselines for the view (MacBook); wall vertices may lie newly inside a copy by up to about 0.08 mm
+  (the walls are held by crossing pairs and the copies' own points); file rounding turns over a few slivers. Next: the
+  uncal shape, with v3's tentorium drawn by rule.
+
 ## Trigeminal neuralgia views in the skull base (module plans, Part A, addition 3) (desktop, 2026-11-26)
 
 Branch `feat/trigeminal-neuralgia`, from `main` after PR 58. Addition 3 of `.claude/module-plans-2026-11-24.md`: a

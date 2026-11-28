@@ -4,6 +4,8 @@ import type { Hemi, LayerKey } from '../state';
 import { APPROACH_GEOM, definitionFor, geomOf, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V1_FIT, V3_FIT, type Landmark, type SbModel } from '../skullbase';
 import { NEEDLE_ID, NEEDLE_NAME, TRIGEMINAL } from '../skullbase/trigeminal';
 import { PERC_NOT_SHOWN, PERC_SECTIONS, V1_NO_MVD } from '../skullbase/trigeminal-text';
+import { HERNIATION, hnMm as mm2, hnPose } from '../skullbase/herniation';
+import { TONSILLAR_NOT_SHOWN, TONSILLAR_SECTIONS } from '../skullbase/herniation-text';
 import { NEEDLE_TOKEN, needleObjects } from './skullbase-needle';
 import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, triangleClaims, V1_CAVERNOUS_NOT_SHOWN, V1_ENDONASAL_NOT_SHOWN, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
 import { measuredOn, TUMOUR_FAMILY, TUMOURS, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
@@ -42,7 +44,7 @@ const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 
     : { brain: 'Brain (fitted template)', hindbrain: 'Cerebellum and brainstem (fitted model)', ventricle: 'Ventricle (fitted model)' }), removed: 'Bone removed', triangle: 'Surgical triangle', tumour: 'Tumour (drawn by rule)', guide: 'Guide line' } as const;
 const KIND_PLURAL: Record<string, string> = { 'Tumour (drawn by rule)': 'Tumour (drawn by rule)', 'Guide line': 'Guide lines', 'Surgical triangle': 'Surgical triangles', 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves', Ossicle: 'Ossicles', Membrane: 'Membranes' };
 const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
-  ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems'], ['approach', 'Surgical views'], ['tumour', 'Tumours']]
+  ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems'], ['approach', 'Surgical views'], ['tumour', 'Tumours'], ['herniation', 'Herniation']]
   : SB_MODEL === 'zanatomy'
   ? [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['approach', 'Surgical views'], ['tumour', 'Tumours'], ['bone', 'Bones and their landmarks']]
   : [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
@@ -50,8 +52,17 @@ const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
 const MODELS: [SbModel, string, string][] = [['v3', 'skullbase', 'Skull base'], ['zanatomy', 'skullbase-v1', 'Skull base v1 (Z-Anatomy)'], ['ct', 'skullbase-ct', 'Skull base v2 (CT)']];
 const SIDE_NAME = { R: 'right', L: 'left' } as const;
 /** the surgical views' shapes: slider label, key, and what full means on this model; a switch (toggle) is on or off: the
- * anterior clinoidectomy takes the view's own piece of the clinoid process (drawn as bone, or as bone removed) */
-const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; note: (g?: SbGroup) => string | null }> = {
+ * anterior clinoidectomy takes the view's own piece of the clinoid process (drawn as bone, or as bone removed); a
+ * herniation view's shape (scope 'herniation') is an illustration, and its label says so */
+const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; scope?: 'herniation'; note: (g?: SbGroup) => string | null }> = {
+  tonsillar: {
+    label: 'Tonsillar herniation (illustration, not a simulation)', key: 'x', scope: 'herniation', note: () => {
+      const t = HERNIATION?.tonsillar;
+      if (!t) return null;
+      const f = t.tonsilTips.full;
+      return `At 100 % the tonsils’ lowest points lie ${fmtMm(f.L.belowLineMm)} mm (left) and ${fmtMm(f.R.belowLineMm)} mm (right) below McRae’s line, a depth chosen to show the shape (${fmtMm(t.descentMm)} mm), against the back of the medulla; the rest of the cerebellum follows less the further it lies from them (none ${fmtMm(t.params.reachMm)} mm away), each point stopping short of the bone and of every structure near it. At 0 % the posterior fossa is as fitted; in between, the two are blended, which is not a grade, a pressure or a time course. The posterior inferior cerebellar arteries are moved with the tonsils (copies drawn in this view only); the brainstem, the fourth ventricle, the other arteries and the nerves stay.`;
+    },
+  },
   ridge: {
     label: 'Sphenoid ridge drilled', key: 'd', toggle: true, note: (g) => {
       const geom = g?.approach ? geomOf(g.approach) : undefined;
@@ -130,13 +141,16 @@ const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; n
  * on the default model): each key once, with what it does in each view that has it. */
 export function surgicalKeyRows(): [string, string][] {
   const by = new Map<string, string[]>();
+  // (a herniation view's shapes only on the model that has them: v3)
+  const herniationKey = (k: string) => Object.values(MORPH_UI).some((m) => m.scope === 'herniation' && m.key.toUpperCase() === k);
   for (const m of Object.values(MORPH_UI)) {
+    if (m.scope === 'herniation' && !HERNIATION) continue;
     const k = m.key.toUpperCase();
     by.set(k, [...new Set([...(by.get(k) ?? []), m.label.charAt(0).toLowerCase() + m.label.slice(1)])]);
   }
   return [
-    ...[...by].sort(([a], [b]) => a.localeCompare(b)).map(([k, labels]): [string, string] => [k, `Surgical view: ${labels.join('; ')} (on / off)`]),
-    ['[  ]', 'Surgical view: its first shape by a tenth'],
+    ...[...by].sort(([a], [b]) => a.localeCompare(b)).map(([k, labels]): [string, string] => [k, `${herniationKey(k) ? 'Herniation view' : 'Surgical view'}: ${labels.join('; ')} (on / off)`]),
+    ['[  ]', 'Surgical or herniation view: its first shape by a tenth'],
   ];
 }
 /** a list of sourced notes */
@@ -401,9 +415,13 @@ export class SkullbaseAtlasPage {
       if (slider.type === 'checkbox') { slider.checked = v >= 50; continue; }
       if (Number(slider.value) === v) continue;
       slider.value = String(v);
+      if (slider.dataset.illustration) slider.setAttribute('aria-valuetext', `${v} % of the illustrated shape`);
       const out = slider.parentElement?.querySelector('output');
       if (out) out.textContent = `${v} %`;
     }
+    // the view's section switch follows the state too (the herniation card's camera buttons turn the cut off and on)
+    const sec = this.tabs.overview.querySelector<HTMLInputElement>('#sb-section');
+    if (sec) sec.checked = s.section;
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
     // the card of what was just selected (or of a link's selection) is brought to the top of the panel
@@ -420,7 +438,7 @@ export class SkullbaseAtlasPage {
     const keep = !!(from?.tumour && g.tumour && from.approach === g.approach);
     this.update((st) => {
       st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.hidden = []; delete st.opacity; st.sel = null;
-      if (!keep) { st.cam = { preset: null }; st.morphs = { ...(g.morphDefault ?? {}) }; }
+      if (!keep) { st.cam = { preset: null }; st.morphs = { ...(g.morphDefault ?? {}) }; st.section = true; }
     }, keep ? {} : { camera: true });
   }
 
@@ -505,7 +523,14 @@ export class SkullbaseAtlasPage {
         : chips(items, s.grp, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
     jumps.views = pane.children[firstChild] as HTMLElement ?? null;
-    if ((g.kind === 'approach' && !g.endonasal && g.morphs?.length) || (g.kind === 'tumour' && g.morphs?.length)) pane.append(jumps.opening = this.openingSliders(g));
+    if ((g.kind === 'approach' && !g.endonasal && g.morphs?.length) || ((g.kind === 'tumour' || g.kind === 'herniation') && g.morphs?.length)) pane.append(jumps.opening = this.openingSliders(g));
+    // a herniation view's cut (the left half removed, so that the right tonsil shows against McRae's line)
+    if (g.kind === 'herniation' && g.section) {
+      const id = 'sb-section';
+      pane.append(h('label', { class: 'check', for: id },
+        h('input', { type: 'checkbox', id, checked: s.section, onchange: (e: Event) => { const on = (e.target as HTMLInputElement).checked; this.update((st) => { st.section = on; }); } }),
+        ' Cut away the left half (a sagittal section just left of the midline)'));
+    }
     // (the audit's UI-13: the endoscope's place and the pieces taken away are in the view's state, SkullState.endo; the
     // bone drilled away is voxels, which no link can hold)
     if (g.endonasal) pane.append(jumps.endoscope = this.endonasal.el, h('p', { class: 'aside' }, 'A copied link keeps where the endoscope is and the pieces taken away, not the bone drilled away with the burr.'));
@@ -574,7 +599,7 @@ export class SkullbaseAtlasPage {
     if (s.sel) pane.append(jumps.about = h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
     else pane.append(jumps.about = groupCard);
     pane.append(...modelBlock);
-    const row = jumpRow([['Views', jumps.views], ['Opening', jumps.opening], ['Endoscope', jumps.endoscope], ['Shown in this view', jumps.shown],
+    const row = jumpRow([['Views', jumps.views], [g.kind === 'herniation' ? 'Shape' : 'Opening', jumps.opening], ['Endoscope', jumps.endoscope], ['Shown in this view', jumps.shown],
       ['Selected', jumps.selected], ['About this view', jumps.about], ['Model', modelBlock[0]]]);
     if (row) pane.prepend(row);
     const tc = this.tourCard();
@@ -645,6 +670,7 @@ export class SkullbaseAtlasPage {
         h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
         k === 'brain' ? h('p', { class: 'aside schematic-note' }, SB_MODEL === 'zanatomy' ? 'Z-Anatomy’s own cortex (BodyParts3D, one adult), not a patient’s.' : 'A template brain fitted into this skull and its arteries, not this patient’s own: the gyri and sulci are the template’s.') : null,
         k === 'hindbrain' || k === 'ventricle' ? h('p', { class: 'aside schematic-note' }, SB_MODEL === 'zanatomy' ? 'Z-Anatomy’s own model (BodyParts3D, one adult), not a patient’s.' : 'One adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own.') : null,
+        st.herniationView ? h('p', { class: 'aside schematic-note' }, 'Drawn moved in this view, by rule, with the slider: an illustration, not a simulation.') : null,
         h('dl', {},
           k === 'removed' && st.approach ? [h('dt', {}, 'Volume'), h('dd', {}, `${APPROACH_GEOM[st.approach]?.removedMl} ml, measured on the model.`)] : null,
           k === 'brain' && st.name === 'Insula' ? [h('dt', {}, 'Notes'), h('dd', {}, this.claims(INSULA))] : null,
@@ -657,6 +683,7 @@ export class SkullbaseAtlasPage {
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
       st.fitted ? h('p', { class: 'aside schematic-note' }, 'Approximate position: carried over from the Z-Anatomy model fitted onto this CT’s skull.') : '',
       st.schematic ? h('p', { class: 'aside schematic-note' }, 'Drawn by rule, not segmented: its course is illustrative.') : '',
+      st.herniationView ? h('p', { class: 'aside schematic-note' }, 'Drawn moved in this view, by rule, with the slider: an illustration, not a simulation.') : '',
       h('dl', {}, ...(k === 'triangle' ? [] : defBlock),
         // a surgical triangle: what it holds or leads to, and for the anterior five what each route shows through it
         k === 'triangle' && triangleClaims(id).length ? [h('dt', {}, 'Contents'), h('dd', {}, this.claims(triangleClaims(id)))] : null,
@@ -691,11 +718,14 @@ export class SkullbaseAtlasPage {
       }
       const pct = Math.round((this.s.morphs[name] ?? 0) * 100);
       const out = h('output', { for: id, class: 'open-out' }, `${pct} %`);
+      const ill = ui.scope === 'herniation';
       const input = h('input', {
         type: 'range', id, min: 0, max: 100, step: 1, value: pct, 'aria-describedby': `${id}-note`, 'data-morph': name,
+        ...(ill ? { 'data-illustration': '1', 'aria-valuetext': `${pct} % of the illustrated shape` } : {}),
         oninput: (e: Event) => {
           const v = Number((e.target as HTMLInputElement).value);
           out.textContent = `${v} %`;
+          if (ill) input.setAttribute('aria-valuetext', `${v} % of the illustrated shape`);
           this.update((st) => { st.morphs = { ...st.morphs, [name]: v / 100 }; });
         },
       });
@@ -704,14 +734,17 @@ export class SkullbaseAtlasPage {
         note ? h('p', { class: 'aside', id: `${id}-note` }, note) : null];
     };
     return h('div', { class: 'open-slider' }, ...(g.morphs ?? []).flatMap(slider),
-      h('p', { class: 'aside' }, 'Illustrative shapes, not measured retractions. The arteries stay where they are, except on the brain being moved, which they follow.'));
+      g.kind === 'herniation'
+        ? h('p', { class: 'aside' }, 'An illustration, not a simulation: the shape is drawn by rule to show where the tissue goes and what it presses on; its amount is chosen, not computed from pressure or tissue mechanics.')
+        : h('p', { class: 'aside' }, 'Illustrative shapes, not measured retractions. The arteries stay where they are, except on the brain being moved, which they follow.'));
   }
 
   /** A sourced view's card with no craniotomy (the endonasal, cavernous sinus and percutaneous views): what the sources
    * say, what is measured on this model, and what is not shown (the endonasal view's drawing and measures are in its
    * panel, with the scope). */
-  private infoBody(which: 'endonasal' | 'cavernous' | 'percutaneous'): (HTMLElement | null)[] {
+  private infoBody(which: 'endonasal' | 'cavernous' | 'percutaneous' | 'tonsillar'): (HTMLElement | null)[] {
     if (which === 'percutaneous') return this.percutaneousBody();
+    if (which === 'tonsillar') return this.tonsillarBody();
     const info = which === 'endonasal' ? ENDONASAL_INFO : CAVERNOUS_INFO;
     const c = CAVERNOUS;
     return [
@@ -785,6 +818,71 @@ export class SkullbaseAtlasPage {
       h('p', { class: 'aside schematic-note' }, v1
         ? 'Illustrative: a needle drawn by rule on one anatomical model’s skull (Z-Anatomy) from the published descriptions; not planned for a patient.'
         : 'Illustrative: a needle drawn by rule on one CT’s skull from the published descriptions; not planned for a patient.'),
+    ];
+  }
+
+  /** What the tonsillar herniation card's section asks for, measured on this model (herniation.ts): McRae's line, the
+   * tonsils' lowest points against it, their gap to the medulla, the bone; no published figure (those are in the claims). */
+  private hnMeasured(m: ApproachSection['measured']): HTMLElement | null {
+    const t = HERNIATION?.tonsillar;
+    if (!t || m !== 'hnTonsillar') return null;
+    const tip = (x: { belowLineMm: number }) => (Math.abs(x.belowLineMm) < 0.05 ? 'on the line' : x.belowLineMm > 0 ? `${fmtMm(x.belowLineMm)} mm below it` : `${fmtMm(-x.belowLineMm)} mm above it`);
+    const r = t.tonsilTips.rest, f = t.tonsilTips.full;
+    const pcts = t.params.checkedAt.map((x) => `${Math.round(x * 100)} %`);
+    const g = t.medullaGapBelowLineMm;
+    const avg = (f.L.belowLineMm + f.R.belowLineMm) / 2;
+    const items = [
+      `McRae’s line, from the basion to the opisthion as drawn on this CT’s occipital bone: ${fmtMm(t.mcraeLengthMm)} mm.`,
+      `The tonsils’ lowest points, measured square to the line: at rest the left ${tip(r.L)}, the right ${tip(r.R)}; at full (the slider at 100 %) the left ${tip(f.L)}, the right ${tip(f.R)}: ${fmtMm(avg)} mm on average, the depth the rule aims for being ${fmtMm(t.descentMm)} mm.`,
+      `The tonsils’ nearest approach to the back of the medulla: ${mm2(t.medullaGapMm.rest)} mm at rest, ${mm2(t.medullaGapMm.full)} mm at full; at full the part of each below McRae’s line lies ${mm2(g.L)} mm (left) and ${mm2(g.R)} mm (right) from it; never inside it (the least gap at the slider values checked, ${mm2(t.medullaGapMm.minAnyT)} mm).`,
+      t.boneVerticesAnyT === 0 && t.pathsCrossingAnything === 0 && t.boneMeshGapMinMm >= t.params.boneGapMm - 0.01
+        ? `No point of the moved copies enters the bone as drawn at ${pcts.slice(0, -1).join(', ')} or ${pcts[pcts.length - 1]} that was not in it at rest: each stays at least ${mm2(t.boneMeshGapMinMm)} mm from the bone meshes drawn here; the posterior inferior cerebellar arteries stay outside the moved tonsils${t.picaOutsideTonsilsAnyT ? '' : ' (not everywhere)'}.`
+        : `${t.boneVerticesAnyT} points of the moved copies enter the bone as drawn at some slider value.`,
+    ];
+    return h('div', { class: 'aside tn-measured', 'data-measured': m },
+      h('p', {}, h('strong', {}, 'Measured on this model')), h('ul', { class: 'plain' }, ...items.map((x) => h('li', {}, x))));
+  }
+
+  /** The tonsillar herniation view's card: the buttons that turn the camera to the view from behind and below and back,
+   * what the sources say with what this model measures, how the shape is drawn and what is not shown. */
+  private tonsillarBody(): (HTMLElement | null)[] {
+    const t = HERNIATION?.tonsillar;
+    if (!t) return [];
+    const p = t.params;
+    // (from behind the cut is off, so that both tonsils show; from the side it is on again)
+    const cam = (pose: { position: number[]; target: number[] } | null) => this.update((s) => {
+      s.cam = pose ? { preset: null, pos: pose.position as [number, number, number], tgt: pose.target as [number, number, number] } : { preset: null };
+      s.section = !pose;
+    }, { camera: true });
+    const moved = [...t.copies].sort((a, b) => b.maxMoveMm - a.maxMoveMm).map((c) => `${c.name.charAt(0).toLowerCase()}${c.name.slice(1)} ${fmtMm(c.maxMoveMm)} mm`).join(', ');
+    // (the neighbours a copy already crosses at rest, by copy: 'the tonsil of cerebellum with the fourth ventricle and the pons')
+    const lc = (n: string) => `${n.charAt(0).toLowerCase()}${n.slice(1)}`;
+    const list = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+    const byCopy = new Map<string, string[]>();
+    for (const k of Object.keys(p.wallsTouched).sort()) {
+      const [a, b] = k.split(' x ').map((x) => SB.get(x.split(' ')[0])?.name ?? x.split(' ')[0]);
+      const l = byCopy.get(a) ?? [];
+      if (!l.includes(`the ${lc(b)}`)) l.push(`the ${lc(b)}`);
+      byCopy.set(a, l);
+    }
+    const touched = [...byCopy].map(([a, bs]) => `the ${lc(a)} with ${list(bs)}`).join('; ');
+    // (copies that overlap at rest: no point of either comes newly inside the other, each way on its own)
+    const copiesOk = Object.values(p.copiesCrossing).every((c) => c.rule === 'same part' || (c.rule === 'inside' ? (c.newlyInsideMax ?? 1) === 0 : c.max <= c.rest));
+    // (the vermis's two halves are one part: not held apart, their crossings only reported)
+    const halvesCross = Object.values(p.copiesCrossing).some((c) => c.rule === 'same part' && c.max > c.rest);
+    return [
+      h('p', { class: 'tn-buttons' },
+        h('button', { type: 'button', class: 'btn', 'data-hn': 'posterior', title: `From behind the foramen magnum and ${p.posteriorElevationDeg}° below it, looking up at the tonsils (the cut off)`, onclick: () => cam(hnPose(t.cameras.posterior)) }, 'View from behind and below'), ' ',
+        h('button', { type: 'button', class: 'btn', 'data-hn': 'sagittal', onclick: () => cam(null) }, 'Back to the view from the side')),
+      h('dl', {},
+        ...TONSILLAR_SECTIONS.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims), this.hnMeasured(x.measured))]),
+        h('dt', {}, 'How the shape is drawn'), h('dd', {},
+          h('p', {}, `By rule (pipeline/skullbase_v3_herniation.py), on copies of the parts it moves, drawn in this view only; the parts themselves, as every other view draws them, do not change. One displacement field moves every copy: the tonsils go down along the back of the medulla (the line fitted through its hindmost points; on this model straight down), ${fmtMm(p.forwardMm)} mm towards the basion, and ${Math.round(p.squeeze * 100)} % narrower towards the canal’s midline, the depth (${fmtMm(p.descentAlongCanalMm)} mm along the canal) solved so that their lowest points lie on average ${fmtMm(t.descentMm)} mm below McRae’s line at full; the part of each tonsil that ends below the line is pressed further towards the basion, by as much as brings it against the back of the medulla. The hemispheres and the vermis follow less the further they lie from the tonsils (none ${fmtMm(p.reachMm)} mm away). The posterior inferior cerebellar arteries move with the cerebellum they lie on, held where they leave the vertebral arteries. At most: ${moved}.`),
+          h('p', {}, `Every structure of the model near the copies (${p.wallsChecked} meshes: the bones, the brainstem and the fourth ventricle, the cerebellar peduncles, the arteries, veins and nerves) stays where it is and is a wall: each moved point’s straight path is traced against it and cut short ${mm2(p.boneGapMm)} mm from the bone as drawn, ${mm2(p.vertebralGapMm)} mm from the vertebral arteries and ${mm2(p.stemGapMm)} mm from everything else, the medulla, the pons and the fourth ventricle among them (${p.pointsCutShort.toLocaleString('en')} points cut short; a point that starts nearer than its gap hardly comes nearer). Its neighbours are held back with it, no point moving more than a point held plus ${mm2(p.behindSlope)} mm for each mm it lies behind it on the way the tonsils move, ${mm2(p.aheadSlope)} for each mm ahead of it and ${mm2(p.sideSlope)} beside it, and the checks below hold back ${p.pointsHeldByChecks.toLocaleString('en')} more.${touched ? ` Where a copy already crosses a neighbour at rest, as the fitted parts do (${touched}), it crosses it no more at any slider value checked${copiesOk ? `, and where two copies already overlap at rest no point of one comes inside the other that was not inside it at rest${halvesCross ? ' (the vermis’s two halves, one part, apart: they cross each other a little more as it moves)' : ''}` : ''}.` : ''}`),
+          h('p', {}, `The slider blends the two shapes in a straight line, so each is checked at ${p.checkedAt.length} values, ${p.checkedAt.map((x) => `${Math.round(x * 100)} %`).join(', ')}: ${t.trianglesTurnedOver === 0 ? 'no triangle of the moved tonsils, hemispheres or vermis turns over' : `${t.trianglesTurnedOver} triangles of the moved tonsils, hemispheres or vermis turn over`}, ${p.trianglesNearlyTurnedOver === 0 ? 'none but slivers' : `${p.trianglesNearlyTurnedOver} triangles other than slivers`} thinner than ${String(p.sliverMm)} mm ${p.trianglesNearlyTurnedOver === 1 ? 'comes' : 'come'} within ${String(p.flipMarginMm)} mm of turning over, and no two neighbouring points of a copy (within 2 mm of each other) close by more than ${mm2(t.slopeMax)} mm for each mm between them at rest (at ${mm2(p.closingLimit)} they would meet at full): the moved tissue does not fold or turn inside out. It is stretched and sheared (up to ${fmtMm(p.stretchMax)} mm per mm: the tonsils are drawn out into pegs), and on the arteries’ tubes ${p.tubeTrianglesTurnedOver} small triangles turn over, their rings intact. These are measured on the moves as computed; the site’s files round each point by up to about 0.01 mm, which can turn over a few of the thinnest tissue slivers and about as many again of the tubes’ small triangles.`)),
+        h('dt', {}, 'McRae’s line'), h('dd', {}, SB_MANIFEST.structures.find((s) => s.id === 'hn_mcrae_line')?.derivation ?? ''),
+        h('dt', {}, 'Not shown'), h('dd', {}, TONSILLAR_NOT_SHOWN)),
+      h('p', { class: 'aside schematic-note' }, 'Illustrative: a shape drawn by rule on one CT with an anatomical model fitted into it; not a simulation of pressure or tissue, and not a patient’s.'),
     ];
   }
 

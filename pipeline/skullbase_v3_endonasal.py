@@ -417,6 +417,16 @@ def carry_sellar() -> None:
             if f.exists():
                 it["bytes"] = f.stat().st_size
         man["structures"] = [s for s in man["structures"] if s["id"] not in ids] + tm
+    # the herniation views' copies and guide (skullbase_v3_herniation.py), kept when this is run again, after the tumours
+    import skullbase_v3_herniation as HN
+    if HN.HN_ITEMS.exists():
+        hn = json.loads(HN.HN_ITEMS.read_text())
+        ids = {t["id"] for t in hn}
+        for it in hn:
+            f = REPO / "public" / it["file"]
+            if f.exists():
+                it["bytes"] = f.stat().st_size
+        man["structures"] = [s for s in man["structures"] if s["id"] not in ids and not s.get("herniationView")] + hn
     # the nerves skullbase_v3_cavernous.py re-routed through the cavernous sinus say so
     import skullbase_v3_cavernous as CAV
     if CAV.CAV_JSON.exists():

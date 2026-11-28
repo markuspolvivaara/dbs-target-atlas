@@ -112,7 +112,7 @@ def tube_part(V: np.ndarray):
 
 
 def plain(it: dict) -> bool:
-    return not (it.get("tumourView") or it.get("approach") or it.get("forView"))
+    return not (it.get("tumourView") or it.get("herniationView") or it.get("approach") or it.get("forView"))
 
 
 def pieces_of(items: list, pick) -> list:

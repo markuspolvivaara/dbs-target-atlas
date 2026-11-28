@@ -172,3 +172,37 @@ export async function nodeMorphs(file: string) {
   }
   return out;
 }
+
+/** A shipped file's surface as one triangle soup with one morph target's displacement per vertex (zero on a node that
+ * does not carry it): P at rest, D the displacement at full (mm, in the scene), so the shape at a slider value t is
+ * P + t·D, as the viewer blends it. */
+export async function morphSoup(file: string, target: string): Promise<{ P: Float64Array; D: Float64Array; T: Uint32Array }> {
+  await MeshoptDecoder.ready;
+  const io = new NodeIO().registerExtensions([EXTMeshoptCompression, KHRMeshQuantization]).registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
+  const doc = await io.readBinary(new Uint8Array(readFileSync(new URL(`../../public/${file}`, import.meta.url))));
+  const P: number[] = [], D: number[] = [], T: number[] = [];
+  const el: number[] = [];
+  for (const node of doc.getRoot().listNodes()) {
+    const mesh = node.getMesh();
+    if (!mesh) continue;
+    const m = node.getWorldMatrix();
+    const names = ((mesh.getExtras() as { targetNames?: string[] }).targetNames) ?? [];
+    for (const prim of mesh.listPrimitives()) {
+      if (prim.getMode() !== 4) continue;
+      const base = P.length / 3;
+      const acc = prim.getAttribute('POSITION')!;
+      const k = names.indexOf(target);
+      const t = k >= 0 ? prim.listTargets()[k]?.getAttribute('POSITION') ?? null : null;
+      for (let i = 0; i < acc.getCount(); i++) {
+        acc.getElement(i, el);
+        P.push(m[0] * el[0] + m[4] * el[1] + m[8] * el[2] + m[12], m[1] * el[0] + m[5] * el[1] + m[9] * el[2] + m[13], m[2] * el[0] + m[6] * el[1] + m[10] * el[2] + m[14]);
+        if (t) {
+          t.getElement(i, el);   // (a displacement: the node's linear part only)
+          D.push(m[0] * el[0] + m[4] * el[1] + m[8] * el[2], m[1] * el[0] + m[5] * el[1] + m[9] * el[2], m[2] * el[0] + m[6] * el[1] + m[10] * el[2]);
+        } else D.push(0, 0, 0);
+      }
+      for (const i of prim.getIndices()!.getArray()!) T.push(base + i);
+    }
+  }
+  return { P: Float64Array.from(P), D: Float64Array.from(D), T: Uint32Array.from(T) };
+}

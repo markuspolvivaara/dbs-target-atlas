@@ -2320,3 +2320,105 @@ test('trigeminal neuralgia (v1): the surgical views have no decompression chip, 
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// module plan A5 (the owner's decisions of 26 November 2026): tonsillar herniation on skull base v3, the shape drawn by
+// rule as copies for its view only (pipeline/skullbase_v3_herniation.py); its slider an illustration, not a simulation
+type HnPose = { position: number[]; target: number[] };
+type HnFile = { tonsillar: { mcraeLengthMm: number; tonsilTips: { full: Record<'L' | 'R', { belowLineMm: number }> }; copies: { id: string; replaces: string }[]; cameras: { sagittal: HnPose; posterior: HnPose } } };
+const hnFile = () => JSON.parse(readFileSync(new URL('../../src/data/generated/sbv3-herniation.json', import.meta.url), 'utf8')) as HnFile;
+/** where the view puts a camera of the report's: 1.6 times as far back along its line of sight (herniation.ts hnPose) */
+const hnPos = (p: HnPose) => p.target.map((x, k) => x + (p.position[k] - x) * 1.6);
+
+test('tonsillar herniation (v3): opens at full with its slider called an illustration, the copies for the parts, its card, the view from behind and the link', async ({ page }) => {
+  const g = guard(page);
+  const H = hnFile().tonsillar;
+  const hash = () => decodeURIComponent(new URL(page.url()).hash);
+  const drawn = async (id: string) => Object.values((await drawnSides(page, id)) ?? {}).some(Boolean);
+  const weight = () => page.evaluate(() => {
+    type M = { morphTargetInfluences?: number[]; morphTargetDictionary?: Record<string, number>; visible: boolean };
+    const v = (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (o: M) => void) => void } } } }).__atlas.viewer;
+    let m = -1;
+    v.scene.traverse((o) => { const i = o.morphTargetDictionary?.tonsillar; if (o.visible && i !== undefined && o.morphTargetInfluences) m = Math.max(m, o.morphTargetInfluences[i]); });
+    return m;
+  });
+  await open(page, './skullbase/#/atlas?g=herniation_tonsillar');
+  await expect(page.locator('.grp-chips[aria-label="Herniation"] .chip[aria-pressed="true"]')).toHaveText('Tonsillar herniation');
+  // the slider at full, its label saying it is an illustration; the link says so
+  const slider = page.locator('#sb-m-tonsillar');
+  await expect(slider).toHaveValue('100');
+  await expect(page.locator('label[for="sb-m-tonsillar"]')).toHaveText('Tonsillar herniation (illustration, not a simulation) (X)');
+  await expect(slider).toHaveAttribute('aria-valuetext', '100 % of the illustrated shape');
+  await expect(page.locator('.open-slider')).toContainText('An illustration, not a simulation');
+  expect(await weight()).toBe(1);
+  expect(hash()).toContain('to=100');
+  // the copies drawn in place of their parts, McRae's line with them; the left half cut away
+  for (const c of H.copies) {
+    expect(await drawn(c.id), c.id).toBe(true);
+    expect(await drawn(c.replaces), c.replaces).toBe(false);
+  }
+  for (const id of ['hn_mcrae_line', 'pf_medulla', 'sb_vertebral_artery', 'tb_anterior_inferior_cerebellar_artery', 'tb_glossopharyngeal_nerve_ix', 'tb_hypoglossal_nerve_xii']) expect(await drawn(id), id).toBe(true);
+  await expect(page.locator('#sb-section')).toBeChecked();
+  await expect(page.locator('.sb-focus .sb-item')).toHaveText(['Tonsil of cerebellum', 'Medulla oblongata', 'Posterior inferior cerebellar artery (fitted course)', 'Vertebral artery', 'McRae’s line (basion to opisthion)']);
+  // the camera from the left, where the pipeline placed it
+  await expect.poll(async () => tnNear((await tnCam(page)).pos, hnPos(H.cameras.sagittal), 0.2)).toBe(true);
+  // the card: the sourced sections, the read-out measured on this model, how the shape is drawn
+  const card = page.locator('.pane:not([hidden]) article.card').last();
+  await expect(card.locator('.eyebrow')).toHaveText('Herniation');
+  await expect(card.locator('h2')).toHaveText('Tonsillar herniation');
+  for (const t of ['What moves', 'The signs and why', 'How far: the line and the thresholds', 'The foramen magnum and its vessels', 'Lumbar puncture',
+    'How the shape is drawn', 'McRae’s line', 'Not shown']) await expect(card.locator('dt', { hasText: t }).first()).toBeVisible();
+  await expect(card).toContainText('Olaru 2024');
+  const readout = card.locator('[data-measured="hnTonsillar"]');
+  await expect(readout).toContainText('Measured on this model');
+  await expect(readout).toContainText(`${H.mcraeLengthMm.toFixed(1)} mm`);
+  await expect(readout).toContainText(`the left ${H.tonsilTips.full.L.belowLineMm.toFixed(1)} mm below it`);
+  await expect(readout).toContainText('No point of the moved copies enters the bone as drawn');
+  await expect(card).toContainText('no triangle of the moved tonsils, hemispheres or vermis turns over');
+  await expect(card.locator('button[data-hn="posterior"]')).toHaveText('View from behind and below');
+  await expect(card).toContainText('not a simulation');
+  // from behind and below, the cut off; back to the side, the cut on
+  await card.locator('button[data-hn="posterior"]').click();
+  await settle(page);
+  await expect.poll(async () => tnNear((await tnCam(page)).pos, hnPos(H.cameras.posterior), 0.2)).toBe(true);
+  await expect.poll(hash).toContain('sec=0');
+  await expect(page.locator('#sb-section')).not.toBeChecked();
+  await page.locator('.pane:not([hidden]) article.card').last().locator('button[data-hn="sagittal"]').click();
+  await settle(page);
+  await expect.poll(async () => tnNear((await tnCam(page)).pos, hnPos(H.cameras.sagittal), 0.2)).toBe(true);
+  await expect.poll(hash).not.toContain('sec=0');
+  // its key takes the shape back to rest, and the link keeps it there after a reload
+  await page.locator('.stage canvas').first().focus();
+  await page.keyboard.press('x');
+  await settle(page);
+  await expect.poll(hash).toContain('to=0');
+  await expect(slider).toHaveValue('0');
+  expect(await weight()).toBe(0);
+  await page.reload();
+  await settle(page);
+  await expect(page.locator('#sb-m-tonsillar')).toHaveValue('0');
+  expect(await weight()).toBe(0);
+  // a link part-way
+  await open(page, './skullbase/#/atlas?g=herniation_tonsillar&to=40');
+  await expect(page.locator('#sb-m-tonsillar')).toHaveValue('40');
+  expect(await weight()).toBeCloseTo(0.4, 5);
+  // the text version lists the line; the help lists the key
+  expect(await textVersion(page)).toContain('McRae’s line (basion to opisthion)');
+  await page.keyboard.press('?');
+  await expect(page.locator('dialog.help')).toContainText('Herniation view: tonsillar herniation (illustration, not a simulation) (on / off)');
+  await page.keyboard.press('Escape');
+  // no other view draws a copy
+  await open(page, './skullbase/#/atlas?g=telovelar');
+  for (const c of H.copies) expect(await drawn(c.id), c.id).toBe(false);
+  expect(await drawn('hn_mcrae_line')).toBe(false);
+  // nor through a link's sel=
+  for (const id of ['pf_tonsil__hn_tonsillar', 'hn_mcrae_line']) {
+    await open(page, `./skullbase/#/atlas?g=telovelar&sel=${id}`);
+    expect(await drawn(id), id).toBe(false);
+  }
+  // v1 has no herniation view: its link opens the default view
+  await open(page, './skullbase-v1/#/atlas?g=herniation_tonsillar&to=100');
+  expect(new URL(page.url()).hash).not.toContain('g=herniation_tonsillar');
+  await expect(page.locator('.grp-chips[aria-label="Herniation"]')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
